@@ -56,6 +56,7 @@ class Posable(xml.etree.ElementTree.Element):
         self._pose.position = position.copy()
 
     def set_rotation(self, rotation: SDF.math.Quaternion):
+
         self._pose.rotation = rotation.copy()
 
     def translate(self, translation: SDF.math.Vector3):

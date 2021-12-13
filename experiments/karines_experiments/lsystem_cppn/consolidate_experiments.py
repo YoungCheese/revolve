@@ -5,18 +5,17 @@ import sys
 # set these variables according to your experiments #
 
 # run from karine_experiments
-dirpath = 'data/lsystem_cppn/'
+dirpath = 'stuff/'
 
 experiments_type = [
-      'hyperplasticoding',
-      'plasticoding'
+      'defaul_experiment'
 ]
 environments = {
   'hyperplasticoding': ['plane'],
   'plasticoding': ['plane']
                  }
 
-runs = range(1, 20+1)
+runs = range(1, 1)
 
 # set these variables according to your experiments #
 
@@ -183,4 +182,3 @@ for exp in experiments_type:
                                         file_summary.write('None' + '\n')
 
             file_summary.close()
-

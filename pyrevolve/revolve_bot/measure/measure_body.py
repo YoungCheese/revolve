@@ -55,6 +55,9 @@ class MeasureBody:
         # TODO: should get this value from the params
         self.max_permitted_modules = 15
 
+        # Thing to calculate corresponding modules
+        self.coordinates_of_modules = None
+
     def count_branching_bricks(self, module=None, init=True):
         """
         Count amount of fully branching modules in body

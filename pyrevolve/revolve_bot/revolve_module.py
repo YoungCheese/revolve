@@ -133,6 +133,8 @@ class RevolveModule:
         return yaml_dict_object
 
     def iter_children(self):
+        # print(self.children)
+        # input()
         return enumerate(self.children)
 
     def _generate_yaml_children(self):

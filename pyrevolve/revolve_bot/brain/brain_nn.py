@@ -21,8 +21,8 @@ class BrainNN(Brain):
     @staticmethod
     def from_yaml(yaml_object):
         """
-        From a yaml object, creates a data struture of interconnected body modules. 
-        Standard names for modules are: 
+        From a yaml object, creates a data struture of interconnected body modules.
+        Standard names for modules are:
         """
         brain = BrainNN()
 
@@ -55,8 +55,11 @@ class BrainNN(Brain):
         yaml_dict_brain['type'] = self.TYPE
 
         yaml_dict_neurons = OrderedDict()
+        # for node_key, node_value in self.nodes.items():
+        #     print(node_key, vars(node_value))
+        # input("nodes")
         for node in self.nodes:
-            yaml_dict_neurons[node] = { 
+            yaml_dict_neurons[node] = {
                 'id': self.nodes[node].id,
                 'layer': self.nodes[node].layer,
                 'part_id': self.nodes[node].part_id,
@@ -67,12 +70,12 @@ class BrainNN(Brain):
         yaml_dict_connections = []
         if self.connections:
             for edge in self.connections:
-                yaml_dict_connections.append({ 
+                yaml_dict_connections.append({
                     'dst': edge.dst,
                     'src': edge.src,
                     'weight': edge.weight,
                 })
-                
+
             yaml_dict_brain['connections'] = yaml_dict_connections
 
         yaml_dict_params = OrderedDict()
@@ -81,16 +84,16 @@ class BrainNN(Brain):
 
             if self.params[node].bias is not None:
                 yaml_dict_params[node]['bias'] = self.params[node].bias
-                
+
             if self.params[node].gain is not None:
                 yaml_dict_params[node]['gain'] = self.params[node].gain
-                
+
             if self.params[node].period is not None:
                 yaml_dict_params[node]['period'] = self.params[node].period
-                
+
             if self.params[node].phase_offset is not None:
                 yaml_dict_params[node]['phase_offset'] = self.params[node].phase_offset
-                
+
             if self.params[node].amplitude is not None:
                 yaml_dict_params[node]['amplitude'] = self.params[node].amplitude
 

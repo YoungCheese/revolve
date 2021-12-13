@@ -26,9 +26,9 @@ async def run():
     """
 
     # experiment params #
-    num_generations = 200
-    population_size = 100
-    offspring_size = 100
+    num_generations = 20
+    population_size = 15
+    offspring_size = 15
     front = 'slaves'
 
     # environment world and z-start
@@ -45,7 +45,8 @@ async def run():
                                'coverage',
                                'joints',
                                'proportion',
-                               'symmetry']
+                               'symmetry',
+                               'size' ,]
                   }
 
     # novelty used 'branching', 'limbs','length_of_limbs','coverage','joints','proportion', 'symmetry', 'sensors','size'

@@ -29,6 +29,9 @@ random.seed(seed)
 logger.info("Seed: {}".format(seed))
 
 
+
+
+
 async def analysis_func():
     analyzer = await (BodyAnalyzer.create(address=("127.0.0.1", 11346)))
 

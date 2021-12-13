@@ -93,7 +93,10 @@ async def run():
         experiment_name=settings.experiment_name,
         experiment_management=experiment_management,
         environments=environments,
-        front=front
+        front=front,
+        novelty_on=False,
+        run_simulation=True,
+        all_settings=False
     )
 
 

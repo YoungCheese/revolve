@@ -64,7 +64,7 @@ def online_old_revolve(robot_manager):
 
 
 def size_penalty(robot):
-    _size_penalty = 1 / robot.phenotype._morphological_measurements.measurements_to_dict()['absolute_size']
+    _size_penalty = 1 / robot.phenotype._morphological_measurements.measurements_to_dict()['.']
 
     return _size_penalty
 
@@ -87,8 +87,8 @@ def diverse_cppn_output(behavioural_measurements, robot):
         value = 0
     else:
         value = 1 * suma
-    print(values)
-    print(value)
+    # print(values)
+    # print(value)
     return value
 
 
@@ -98,7 +98,7 @@ def fast_novel_limbic(behavioural_measurements, robot):
         displacement_velocity_hill = behavioural_measurements['displacement_velocity_hill']
         novelty = robot.novelty
         limbic_penalty = max(0.1, 1 - robot.phenotype._morphological_measurements.measurements_to_dict()['length_of_limbs'])
-        
+
         if displacement_velocity_hill >= 0:
             fitness = displacement_velocity_hill * novelty * limbic_penalty
         else:
@@ -141,6 +141,24 @@ def displacement_velocity_hill(behavioural_measurements, robot):
         return None
 
 
+def displacement_velocity_hill_cost(behavioural_measurements, robot):
+    if behavioural_measurements is not None:
+        # does it make sense to multiply with fit if fitness < 0? otherwise we make it higher
+        if fitness > 0:
+            fitness = behavioural_measurements['displacement_velocity_hill']/robot.phenotype.building_diff_unweighted
+        elif fitness < 0:
+            fitness = behavioural_measurements['displacement_velocity_hill']*robot.phenotype.building_diff_unweighted
+        if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
+            fitness = -0.1        # # comment out below for testing purposes
+        # if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
+        #     fitness = -0.1
+        #
+        # elif fitness < 0:
+        #     fitness /= 10
+        return fitness
+    else:
+        return None
+
 def gecko(robot):
 
     points = 0
@@ -174,7 +192,7 @@ def gecko(robot):
 
     return points * robot.novelty
 
-    
+
 def floor_is_lava(behavioural_measurements, robot, cost=False):
     _displacement_velocity_hill = displacement_velocity_hill(behavioural_measurements, robot, cost)
     _contacts = measures.contacts(robot_manager, robot)

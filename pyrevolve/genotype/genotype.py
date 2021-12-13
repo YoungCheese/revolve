@@ -41,3 +41,4 @@ class GenotypeConfig:
         self.plastic = plastic
         self.environmental_conditions = environmental_conditions
         self.logic_operators = logic_operators
+        self.building_diff = 0

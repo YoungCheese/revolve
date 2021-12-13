@@ -189,6 +189,10 @@ class Plasticoding(Genotype):
     def develop(self, environment):
         self.early_development(environment)
         phenotype = self.late_development()
+            #module.substrate_coordinates = coordinates
+
+        # print(self.substrate_coordinates_all)
+        #inspect phenotype!
         return phenotype
 
     def early_development(self, environment):
@@ -271,7 +275,7 @@ class Plasticoding(Genotype):
                 else:
                     position = position + 1
 
-        logger.info('Robot ' + str(self.id) + ' was early-developed.')
+        # logger.info('Robot ' + str(self.id) + ' was early-developed.')
 
     def late_development(self):
 
@@ -290,6 +294,7 @@ class Plasticoding(Genotype):
                 module.orientation = 0
                 module.rgb = [1, 1, 0]
                 self.mounting_reference = module
+                # print(vars(module))
 
             if [symbol[self.index_symbol], []] in Alphabet.morphology_mounting_commands():
                 self.morph_mounting_container = symbol[self.index_symbol]
@@ -319,7 +324,7 @@ class Plasticoding(Genotype):
                 self.decode_brain_moving(symbol)
 
         self.add_imu_nodes()
-        logger.info('Robot ' + str(self.id) + ' was late-developed.')
+        # logger.info('Robot ' + str(self.id) + ' was late-developed.')
 
         return self.phenotype
 
@@ -565,9 +570,11 @@ class Plasticoding(Genotype):
 
             module.info = {}
             module.info['new_module_type'] = new_module_type
+            # module['info']['new_module']
             module.orientation = self.get_angle(new_module_type,
                                                 self.mounting_reference)
             module.rgb = self.get_color(new_module_type)
+            # print(vars(module), 'vars module')
 
             if new_module_type != Alphabet.SENSOR:
                 self.quantity_modules += 1
@@ -593,6 +600,8 @@ class Plasticoding(Genotype):
                 self.morph_mounting_container = None
                 module.id = self.mounting_reference.id+'s'+str(slot)
                 self.decode_brain_node(symbol, module.id)
+            # print("mounting reference", vars(self.mounting_reference))
+
 
     def decode_brain_node(self, symbol, part_id):
 

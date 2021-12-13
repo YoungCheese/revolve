@@ -1,4 +1,4 @@
-# [(G,P), (G,P), (G,P), (G,P), (G,P)]
+ # [(G,P), (G,P), (G,P), (G,P), (G,P)]
 
 from pyrevolve.evolution.individual import Individual
 from pyrevolve.evolution import fitness
@@ -119,21 +119,34 @@ class Population:
 
         for environment in self.conf.environments:
 
+            # print(environment)
+
             individual[environment] = copy.deepcopy(individual_temp)
             individual[environment].develop(environment)
+
 
             if len(individual) == 1:
                 self.conf.experiment_management.export_genotype(individual[environment])
                 self.conf.experiment_management.export_parents(individual[environment])
 
         for environment in self.conf.environments:
-
+            # do stuff here, or go into individual.py
             self.conf.experiment_management.export_phenotype(individual[environment], environment)
             self.conf.experiment_management.export_phenotype_images(os.path.join('data_fullevolution',
                                                                     environment,'phenotype_images'),
                                                                     individual[environment])
             individual[environment].phenotype.measure_phenotype(self.conf.experiment_name)
+
+            if environment == 'tilted5':
+
+                # initiate cost measurement
+                individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
+                # individual[environment].phenotype.export_cost(self.conf.experiment_name, environment)
+
+
             individual[environment].phenotype.export_phenotype_measurements(self.conf.experiment_name, environment)
+
+
             # because of the bloating in plasticoding, cleans up intermediate phenotype before saving object
             individual[environment].genotype.intermediate_phenotype = None
 
@@ -222,7 +235,7 @@ class Population:
             if self.conf.novelty_on['novelty_pop']:
                 self.calculate_distances(pool_individuals, pop_measures, pop_measures, environment, gen_num, 'pop')
 
-            print('> Finished novelty calculation.')
+            # print('> Finished novelty calculation.')
 
     def calculate_distances(self, pool_individuals, references, to_compare, environment, gen_num, type):
         # calculate distances
@@ -276,6 +289,7 @@ class Population:
         for i in range(self.conf.population_size-len(recovered_individuals)):
             individual = self._new_individual(
                 self.conf.genotype_constructor(self.conf.genotype_conf, self.next_robot_id))
+            # print(self.conf.genotype_conf, 'gaat in newindi')
 
             self.individuals.append(individual)
             self.next_robot_id += 1
@@ -566,7 +580,7 @@ class Population:
                                                                  individual.phenotype._behavioural_measurements.items())
 
             if type_simulation == 'evolve':
-                
+
                 individual.evaluated = True
                 self.conf.experiment_management.export_behavior_measures(individual.phenotype.id,
                                                                          individual.phenotype._behavioural_measurements,
@@ -585,7 +599,7 @@ class Population:
         """
         for individual in individuals:
 
-            logger.info(f'Evaluation of Individual {individual[environment].phenotype.id} (gen {gen_num}) ')
+            # logger.info(f'Evaluation of Individual {individual[environment].phenotype.id} (gen {gen_num}) ')
 
             if individual[environment].phenotype._behavioural_measurements is None:
                 behavioural_measurements = None
@@ -597,7 +611,7 @@ class Population:
             individual[environment].fitness =\
                 conf.fitness_function(behavioural_measurements, individual[environment])
 
-            logger.info(f'Individual {individual[environment].phenotype.id} has a fitness of {individual[environment].fitness}')
+            # logger.info(f'Individual {individual[environment].phenotype.id} has a fitness of {individual[environment].fitness}')
 
             if type_simulation == 'evolve':
                 self.conf.experiment_management.export_fitness(individual[environment], environment, gen_num)
@@ -718,5 +732,4 @@ class Population:
                 self.conf.experiment_management.export_individual(individual[final_season],
                                                                   final_season)
 
-        print('> Finished fitness consolidation.')
-
+        # print('> Finished fitness consolidation.')

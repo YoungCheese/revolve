@@ -7,6 +7,7 @@ from collections import OrderedDict
 from collections import deque
 
 from pyrevolve import SDF
+# from plasticoding import Alphabet
 
 from .revolve_module import CoreModule, TouchSensorModule, Orientation
 from .revolve_module import Orientation
@@ -19,6 +20,7 @@ from .measure.measure_brain import MeasureBrain
 
 from ..custom_logging.logger import logger
 import os
+
 
 class RevolveBot:
     """
@@ -36,6 +38,14 @@ class RevolveBot:
         self._behavioural_measurements = None
         self.self_collide = self_collide
         self.battery_level = 0.0
+        self.building_diff_unweighted = 0
+        self.building_diff_weighted = 0
+        self.substrate_coordinates_all = None
+        self.substrate_coordinates_type = {}
+        self.current_type = None
+        self.cost_distinct_coord = 1
+        self.cost_distinct_module = 0.5
+        self.costdict = {'ST' : 0, 'AJ1' : 1, 'AJ2' : 1.25, 'C' : 0, 'B' : 1.5}
 
     @property
     def id(self):
@@ -53,6 +63,7 @@ class RevolveBot:
         robot_size = 1 + self._recursive_size_measurement(self._body)
         return robot_size
 
+
     def _recursive_size_measurement(self, module):
         count = 0
         for _, child in module.iter_children():
@@ -60,6 +71,94 @@ class RevolveBot:
                 count += 1 + self._recursive_size_measurement(child)
 
         return count
+
+
+    # recursively gets coordinates from all the non sensor modules and puts in dict with coordinates as key and module as value
+    def _recursive_coord(self, module):
+        if module.info['new_module_type']._value_ != 'ST':
+            self.substrate_coordinates_type[(module.substrate_coordinates[0],module.substrate_coordinates[1] )] = module.info['new_module_type']._value_
+        for _, child in module.iter_children():
+            if child is not None:
+                self._recursive_coord(child)
+
+    # function that measures weighted and unweighted costs. adds cost to list, rotates one of the
+    # dicts and measures again. adds lowest cost to attribute
+    def measure_cost(self,planie):
+        self._recursive_coord(self._body)
+        planie._recursive_coord(planie._body)
+        # print(self.substrate_coordinates_type)
+        # print(planie.substrate_coordinates_type)
+        unweighted_costs = []
+        weighted_costs = []
+        unweighted_costs.append(self.symmetric_difference_unweighted(planie))
+        weighted_costs.append(self.symmetric_difference_weighted(planie))
+        for i in range(3):
+            self.rotate()
+            unweighted_costs.append(self.symmetric_difference_unweighted(planie))
+            weighted_costs.append(self.symmetric_difference_weighted(planie))
+        self.building_diff_weighted = min(weighted_costs)
+        self.building_diff_unweighted = min(unweighted_costs)
+        print(self.building_diff_unweighted, 'unw')
+        print(self.building_diff_weighted, 'w')
+
+
+    # rotates the grid of a robot. first entry becomes second entry of tuple, -1 * second becomes first.
+    # flag to see if unweighted or weighted. this decides which dict to rotate
+    def rotate(self):
+        newdict = {}
+        for key in self.substrate_coordinates_type:
+            newkey = (-1 * key[1], key[0])
+            newdict[newkey] = self.substrate_coordinates_type[key]
+        # rotate the coordinates 90 degrees
+        self.substrate_coordinates_type = newdict
+
+
+    # loop over dict. if coordinates are the same, add difference of their cost (absolute value of subtracting them
+    # from eachoter). else add cost for distinct coordinates. loop then over other dict (the plane robot)
+    # most expensive is building a module from scratch, but also losing it completely
+    # if there is a module but it changes, it is less expensive (half so expensive as spawning)
+    ## todo take into account different modules between the two enviroments
+    ## todo take into account which module is being spawned from thin air
+    def symmetric_difference_weighted(self, planie):
+        dif = 0
+        list = []
+        for key in self.substrate_coordinates_type:
+            if key in planie.substrate_coordinates_type:
+                list.append(key)
+                self.current_type = self.substrate_coordinates_type[key]
+                planie.current_type = planie.substrate_coordinates_type[key]
+                if self.current_type != planie.current_type:
+                    # way of calculating the cost for different modules could be tweaked, differentiate between different
+                    # modules
+                    dif += self.cost_distinct_module
+            elif key in list:
+                continue
+            else:
+                # or check which module is built
+                dif += self.cost_distinct_coord
+
+        for key in planie.substrate_coordinates_type:
+            if key in self.substrate_coordinates_type and key not in list:
+                self.current_type = self.substrate_coordinates_type[key]
+                planie.current_type = planie.substrate_coordinates_type[key]
+                if self.current_type != planie.current_type:
+                    dif += self.cost_distinct_module
+            elif key in list:
+                continue
+            else:
+                dif += self.cost_distinct_coord
+        return dif
+
+
+    # compares 2 grids by changing the grids to a set and check differences
+    # via built in method
+    def symmetric_difference_unweighted(self, planie):
+        setstill = set(planie.substrate_coordinates_type)
+        setrot = set(self.substrate_coordinates_type)
+        dif = setstill ^ setrot
+        dif = len(dif)
+        return dif
+
 
     def measure_behaviour(self):
         """
@@ -69,10 +168,15 @@ class RevolveBot:
         pass
 
     def measure_phenotype(self, experiment_name):
+        # make an attribute called cost measurements which depicts the difference of the 2 environemnts
+
         self._morphological_measurements = self.measure_body()
         self._brain_measurements = self.measure_brain()
-        print('Robot ' + str(self.id) + ' was measured.')
-        logger.info('Robot ' + str(self.id) + ' was measured.')
+        # measure the cost there
+        # self._building_diff = self.measure_cost()
+
+        # print('Robot ' + str(self.id) + ' was measured.')
+        # logger.info('Robot ' + str(self.id) + ' was measured.')
 
     def measure_body(self):
         """
@@ -88,19 +192,35 @@ class RevolveBot:
             logger.exception('Failed measuring body')
 
     def export_phenotype_measurements(self, path, environment):
-        with open('experiments/' + path + '/data_fullevolution/'+environment+'/descriptors/'
+        with open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
                   + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
 
             for key, value in self._morphological_measurements.measurements_to_dict().items():
                 file.write('{} {}\n'.format(key, value))
             for key, value in self._brain_measurements.measurements_to_dict().items():
                 file.write('{} {}\n'.format(key, value))
+            # print('kaas')
+            file.write('{} {}\n'.format('unweighted cost', self.building_diff_unweighted))
+            file.write('{} {}\n'.format('weighted cost', self.building_diff_weighted))
+
+
+
+    def export_cost(self, path, environment):
+        with open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
+                  + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
+
+            file.write('{} {}\n'.format('unweighted cost', self.building_diff_unweighted))
+            file.write('{} {}\n'.format('weighted cost', self.building_diff_weighted))
+
+
+            # export here jasper
 
     def measure_brain(self):
         """
         :return: instance of MeasureBrain after performing all measurements
         """
         try:
+            measure = MeasureBrain(self._brain, 10)
             measure = MeasureBrain(self._brain, 10)
             measure_b = MeasureBody(self._body)
             measure_b.count_active_hinges()
@@ -198,7 +318,7 @@ class RevolveBot:
         Update all coordinates for body components
 
         :param raise_for_intersections: enable raising an exception if a collision of coordinates is detected
-        :raises self.ItersectionCollisionException: If a collision of coordinates is detected (and check is enabled)
+        :raises self.IntersectionCollisionException: If a collision of coordinates is detected (and check is enabled)
         """
         substrate_coordinates_map = {(0, 0): self._body.id}
         self._body.substrate_coordinates = (0, 0)
@@ -209,6 +329,7 @@ class RevolveBot:
         A collision has been detected when updating the robot coordinates.
         Check self.substrate_coordinates_map to know more.
         """
+
         def __init__(self, substrate_coordinates_map):
             super().__init__(self)
             self.substrate_coordinates_map = substrate_coordinates_map
@@ -226,19 +347,19 @@ class RevolveBot:
         :param substrate_coordinates_map: map for all already explored coordinates(useful for coordinates conflict checks)
         """
         dic = {Orientation.NORTH: 0,
-               Orientation.WEST:  1,
+               Orientation.WEST: 1,
                Orientation.SOUTH: 2,
-               Orientation.EAST:  3}
+               Orientation.EAST: 3}
         inverse_dic = {0: Orientation.NORTH,
                        1: Orientation.WEST,
                        2: Orientation.SOUTH,
                        3: Orientation.EAST}
 
         movement_table = {
-            Orientation.NORTH: ( 1,  0),
-            Orientation.WEST:  ( 0, -1),
-            Orientation.SOUTH: (-1,  0),
-            Orientation.EAST:  ( 0,  1),
+            Orientation.NORTH: (1, 0),
+            Orientation.WEST: (0, -1),
+            Orientation.SOUTH: (-1, 0),
+            Orientation.EAST: (0, 1),
         }
 
         for slot, module in parent.iter_children():
@@ -267,6 +388,7 @@ class RevolveBot:
                 if coordinates in substrate_coordinates_map:
                     raise self.ItersectionCollisionException(substrate_coordinates_map)
                 substrate_coordinates_map[coordinates] = module.id
+                print(substrate_coordinates_map, 'map')
 
             self._update_substrate(raise_for_intersections,
                                    module,

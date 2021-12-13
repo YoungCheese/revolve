@@ -1,6 +1,5 @@
-# (G,P)
+  # (G,P)
 import pickle
-
 
 class Individual:
     def __init__(self, genotype, phenotype=None):
