@@ -142,9 +142,11 @@ class Population:
                 # initiate cost measurement
                 individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
                 # individual[environment].phenotype.export_cost(self.conf.experiment_name, environment)
+                # print(individual['plane'].phenotype.building_diff_weighted)
+                # print(individual['tilted5'].phenotype.building_diff_weighted)
 
-
-            individual[environment].phenotype.export_phenotype_measurements(self.conf.experiment_name, environment)
+                individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
+                individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane')
 
 
             # because of the bloating in plasticoding, cleans up intermediate phenotype before saving object

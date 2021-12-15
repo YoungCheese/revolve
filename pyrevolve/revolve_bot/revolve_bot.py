@@ -97,9 +97,12 @@ class RevolveBot:
             unweighted_costs.append(self.symmetric_difference_unweighted(planie))
             weighted_costs.append(self.symmetric_difference_weighted(planie))
         self.building_diff_weighted = min(weighted_costs)
+        planie.building_diff_weighted = min(weighted_costs)
         self.building_diff_unweighted = min(unweighted_costs)
-        print(self.building_diff_unweighted, 'unw')
-        print(self.building_diff_weighted, 'w')
+        planie.building_diff_unweighted = min(unweighted_costs)
+
+        # print(self.building_diff_unweighted, 'unw')
+        # print(self.building_diff_weighted, 'w')
 
 
     # rotates the grid of a robot. first entry becomes second entry of tuple, -1 * second becomes first.

@@ -1,0 +1,33 @@
+branching 0
+branching_modules_count 0
+limbs 0.2857142857142857
+extremities 2
+length_of_limbs 0.75
+extensiveness 6
+coverage 0.4166666666666667
+joints 0.625
+hinge_count 6
+active_hinges_count 5
+brick_count 3
+touch_sensor_count 4
+brick_sensor_count 0
+proportion 0.375
+width 3
+height 8
+size 0.6666666666666666
+absolute_size 10
+sensors 0.4444444444444444
+symmetry 0
+avg_period 0.3748036199210083
+dev_period 0.9607133086171807
+avg_phase_offset 0.6670532597117808
+dev_phase_offset 0.9400814742783787
+avg_amplitude 0.5909385681625137
+dev_amplitude 0.9069275463342839
+avg_intra_dev_params 0.9180793003646088
+avg_inter_dev_params 0.9394685783871931
+sensors_reach 0.25
+recurrence 0
+synaptic_reception 0.0
+unweighted cost 6
+weighted cost 7.5

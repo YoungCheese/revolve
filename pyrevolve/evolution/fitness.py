@@ -144,11 +144,13 @@ def displacement_velocity_hill(behavioural_measurements, robot):
 def displacement_velocity_hill_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
         # does it make sense to multiply with fit if fitness < 0? otherwise we make it higher
+        fitness = behavioural_measurements['displacement_velocity_hill']
+        print(fitness, robot.phenotype.building_diff_unweighted)
         if fitness > 0:
-            fitness = behavioural_measurements['displacement_velocity_hill']/robot.phenotype.building_diff_unweighted
+            fitness = fitness/robot.phenotype.building_diff_unweighted
         elif fitness < 0:
-            fitness = behavioural_measurements['displacement_velocity_hill']*robot.phenotype.building_diff_unweighted
-        if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
+            fitness = fitness*robot.phenotype.building_diff_unweighted
+        elif fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
             fitness = -0.1        # # comment out below for testing purposes
         # if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
         #     fitness = -0.1

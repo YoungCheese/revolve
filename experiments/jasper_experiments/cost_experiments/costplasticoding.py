@@ -26,8 +26,8 @@ async def run():
     """
 
     # experiment params #
-    num_generations = 1
-    population_size = 30
+    num_generations = 2
+    population_size = 20
     offspring_size = 2
     front = 'slaves'
 
