@@ -203,8 +203,8 @@ class RevolveBot:
             for key, value in self._brain_measurements.measurements_to_dict().items():
                 file.write('{} {}\n'.format(key, value))
             # print('kaas')
-            file.write('{} {}\n'.format('unweighted cost', self.building_diff_unweighted))
-            file.write('{} {}\n'.format('weighted cost', self.building_diff_weighted))
+            file.write('{} {}\n'.format('unweighted_cost', self.building_diff_unweighted))
+            file.write('{} {}\n'.format('weighted_cost', self.building_diff_weighted))
 
 
 
