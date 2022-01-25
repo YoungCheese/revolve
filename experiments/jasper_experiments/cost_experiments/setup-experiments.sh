@@ -2,11 +2,11 @@
 #set -e
 #set -x
 
-runs=10
+runs=20
 
-num_terminals=10
+num_terminals=6
 start_port=8000
-final_gen=200
+final_gen=199
 experiments=("costplasticoding")
 managers_sulfix=("" "")
 experiments_path=jasper_experiments/data/
@@ -58,9 +58,9 @@ managers_path=experiments/jasper_experiments/cost_experiments/
     for experiment in "${to_do[@]}"
     do
          echo ""
-         echo -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 2 --port-start $start_port
+         echo -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 4 --port-start $start_port
 
-         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 2 --port-start $start_port
+         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 4 --port-start $start_port
 
          start_port=$((${start_port}+10))
     done
