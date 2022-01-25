@@ -141,25 +141,33 @@ def displacement_velocity_hill(behavioural_measurements, robot):
         return None
 
 
+def displacement_velocity_cost(behavioural_measurements, robot):
+    if behavioural_measurements is not None:
+        speed = behavioural_measurements['displacement_velocity_hill']
+        # print(fitness, robot.phenotype.building_diff_unweighted)
+        if speed > 0:
+            speed = speed/(robot.phenotype.building_diff_unweighted+1)
+        else:
+            speed = speed*(robot.phenotype.building_diff_unweighted+1)
+        return speed
+    else:
+        return None
+
+
 def displacement_velocity_hill_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
-        # does it make sense to multiply with fit if fitness < 0? otherwise we make it higher
-        fitness = behavioural_measurements['displacement_velocity_hill']
-        print(fitness, robot.phenotype.building_diff_unweighted)
-        if fitness > 0:
-            fitness = fitness/robot.phenotype.building_diff_unweighted
+        fitness = displacement_velocity_cost(behavioural_measurements, robot)
+
+        if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
+            fitness = -0.1
+
         elif fitness < 0:
-            fitness = fitness*robot.phenotype.building_diff_unweighted
-        elif fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
-            fitness = -0.1        # # comment out below for testing purposes
-        # if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
-        #     fitness = -0.1
-        #
-        # elif fitness < 0:
-        #     fitness /= 10
+            fitness /= 10
+
         return fitness
     else:
         return None
+
 
 def gecko(robot):
 

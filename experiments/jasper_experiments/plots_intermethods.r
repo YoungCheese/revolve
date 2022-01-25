@@ -13,30 +13,30 @@ library(viridis)
 
 #### CHANGE THE PARAMETERS HERE ####
 
-base_directory <-paste('exps', sep='')
+base_directory <-paste('data', sep='')
 analysis = 'analysis'
 output_directory = paste(base_directory,'/',analysis ,sep='')
 
-experiments_type = c('kaas')
-experiments_labels = c( 'kaas')
+experiments_type = c('testtest')#, 'baseline')
+experiments_labels = c( 'testtest')
 runs = list(c(1:1),
             c(1:1))
-environments = list( c( 'plane', 'tilted5') )
+environments = list( c( 'plane') )
 
 # methods are product of experiments_type VS environments and should be coupled with colors.
 # make sure to define methods_labels in alphabetic order, and experiments_type accordingly
-methods_labels = c('kaas')
+methods_labels = c('testtest')
 experiments_type_colors = c('#EE8610', # orange
                             '#009900') # green
 
 #aggregations = c('min', 'Q25','mean', 'median', 'Q75','max')
 aggregations = c( 'Q25', 'median', 'Q75')
 
-gens = 2
+gens = 100
 pop = 20
 
-#gens_box_comparisons = c(gens-1)
-gens_box_comparisons = c(0, 49, 149)
+#gens_box_comparisons = c(number of gens-1)
+gens_box_comparisons = c(9)
 
 measures_names = c(
   'displacement_velocity_hill',
@@ -113,6 +113,13 @@ measures_labels = c(
   'weighted_cost'
 )
 
+
+
+
+
+
+
+
 more_measures_names = c(
   # 'novelty',
   'novelty_pop',
@@ -150,7 +157,6 @@ for (exp in 1:length(experiments_type))
     {
       measures   = read.table(paste(base_directory,paste(experiments_type[exp], environments[[exp]][env], run,"all_measures.tsv", sep='_'), sep='/'),
                               header = TRUE, fill=TRUE)
-
       for( m in 1:length(measures_names))
       {
         measures[measures_names[m]] = as.numeric(as.character(measures[[measures_names[m]]]))
@@ -272,7 +278,7 @@ for (met in 1:length(methods))
 
 
 
-all_na = colSums(is.na(measures_aver.025220000ages_gens)) == nrow(measures_averages_gens)
+all_na = colSums(is.na(measures_averages_gens)) == nrow(measures_averages_gens)
 for (i in 1:length(measures_names))
 {
 

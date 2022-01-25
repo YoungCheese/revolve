@@ -12,5 +12,6 @@ joblib
 pandas
 neat-python>=0.92
 python-dateutil>=2.8.0
+scikit-learn
 
 -e git+https://github.com/ci-group/pygazebo.git@master#egg=pygazebo

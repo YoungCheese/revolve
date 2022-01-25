@@ -8,10 +8,10 @@ import sys
 dirpath = 'data/'
 
 experiments_type = [
-      'kaas'
+      'testtest'
 ]
 environments = {
-  'kaas': ['plane', 'tilted5']
+  'testtest': ['plane', 'tilted5']
                  }
 
 runs = range(1, 1+1)
@@ -43,7 +43,7 @@ def build_headers(path, path1):
 
     with open(pt_file) as file:
         for idx, line in enumerate(file):
-            print(line.strip().split(' '))
+          #  print(line.strip().split(' '))
             measure, value = line.strip().split(' ')
             phenotype_headers.append(measure)
             file_summary.write(measure)

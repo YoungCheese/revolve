@@ -391,7 +391,7 @@ class RevolveBot:
                 if coordinates in substrate_coordinates_map:
                     raise self.ItersectionCollisionException(substrate_coordinates_map)
                 substrate_coordinates_map[coordinates] = module.id
-                print(substrate_coordinates_map, 'map')
+                # print(substrate_coordinates_map, 'map')
 
             self._update_substrate(raise_for_intersections,
                                    module,

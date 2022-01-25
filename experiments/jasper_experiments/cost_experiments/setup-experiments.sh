@@ -2,11 +2,11 @@
 #set -e
 #set -x
 
-runs=2
+runs=10
 
-num_terminals=2
+num_terminals=10
 start_port=8000
-final_gen=19
+final_gen=200
 experiments=("costplasticoding")
 managers_sulfix=("" "")
 experiments_path=jasper_experiments/data/
