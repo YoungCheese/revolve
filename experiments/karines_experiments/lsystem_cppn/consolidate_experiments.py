@@ -154,6 +154,7 @@ for exp in experiments_type:
                                         cf_file = open(filen, 'r')
                                         fitness = cf_file.read()
                                         file_summary.write(fitness + '\t')
+                                        cf_file.close()
                                     else:
                                         file_summary.write('None' + '\t')
 
@@ -162,6 +163,7 @@ for exp in experiments_type:
                                         cf_file = open(filen, 'r')
                                         novelty = cf_file.read()
                                         file_summary.write(novelty + '\t')
+                                        cf_file.close()
                                     else:
                                         file_summary.write('None' + '\t')
 
@@ -170,6 +172,7 @@ for exp in experiments_type:
                                         cf_file = open(filen, 'r')
                                         novelty_pop = cf_file.read()
                                         file_summary.write(novelty_pop + '\t')
+                                        cf_file.close()
                                     else:
                                         file_summary.write('None' + '\t')
 
@@ -178,6 +181,7 @@ for exp in experiments_type:
                                         cf_file = open(filen, 'r')
                                         cons_fitness = cf_file.read()
                                         file_summary.write(cons_fitness + '\n')
+                                        cf_file.close()
                                     else:
                                         file_summary.write('None' + '\n')
 

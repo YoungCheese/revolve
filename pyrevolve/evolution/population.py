@@ -182,8 +182,9 @@ class Population:
             try:
                 file = open(file_name, 'rb')
                 self.novelty_archive = pickle.load(file)
+                file.close()
             except:
-                print('bad pickle for archiive')
+                print('bad pickle for archive')
 
     async def load_snapshot(self, gen_num):
         """

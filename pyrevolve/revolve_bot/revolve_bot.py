@@ -195,28 +195,30 @@ class RevolveBot:
             logger.exception('Failed measuring body')
 
     def export_phenotype_measurements(self, path, environment):
-        with open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
-                  + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
+        file = open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
+                  + 'phenotype_desc_' + str(self.id) + '.txt', 'a')
 
-            for key, value in self._morphological_measurements.measurements_to_dict().items():
-                file.write('{} {}\n'.format(key, value))
-            for key, value in self._brain_measurements.measurements_to_dict().items():
-                file.write('{} {}\n'.format(key, value))
-            # print('kaas')
-            file.write('{} {}\n'.format('unweighted_cost', self.building_diff_unweighted))
-            file.write('{} {}\n'.format('weighted_cost', self.building_diff_weighted))
+        for key, value in self._morphological_measurements.measurements_to_dict().items():
+            file.write('{} {}\n'.format(key, value))
+        for key, value in self._brain_measurements.measurements_to_dict().items():
+            file.write('{} {}\n'.format(key, value))
+        # print('kaas')
+        file.write('{} {}\n'.format('unweighted_cost', self.building_diff_unweighted))
+        file.write('{} {}\n'.format('weighted_cost', self.building_diff_weighted))
 
-
-
-    def export_cost(self, path, environment):
-        with open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
-                  + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
-
-            file.write('{} {}\n'.format('unweighted cost', self.building_diff_unweighted))
-            file.write('{} {}\n'.format('weighted cost', self.building_diff_weighted))
+        file.close()
 
 
-            # export here jasper
+
+    # def export_cost(self, path, environment):
+    #     with open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
+    #               + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
+    #
+    #         file.write('{} {}\n'.format('unweighted cost', self.building_diff_unweighted))
+    #         file.write('{} {}\n'.format('weighted cost', self.building_diff_weighted))
+    #
+    #     file.close()
+    #         export here jasper
 
     def measure_brain(self):
         """

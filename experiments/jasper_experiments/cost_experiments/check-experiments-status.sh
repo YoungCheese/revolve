@@ -1,7 +1,7 @@
 #!/bin/bash
 
-runs=2
-final_gen=19
+runs=20
+final_gen=199
 experiments=("costplasticoding")
 
 
