@@ -47,6 +47,7 @@ coverage.xml
 *,cover
 experiments/examples/output/
 experiments/karines_experiments/data/
+experimenst/jasper_experiments/data/
 test.py
 
 # Translations
