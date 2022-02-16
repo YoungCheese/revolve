@@ -3,7 +3,9 @@
 #set -x
 
 runs=20
-final_gen=19
+num_terminals=6
+start_port=8000
+final_gen=199
 experiments=("costplasticoding")
 managers_sulfix=("" "")
 experiments_path=jasper_experiments/data/
