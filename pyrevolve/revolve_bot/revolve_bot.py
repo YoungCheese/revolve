@@ -44,8 +44,9 @@ class RevolveBot:
         self.substrate_coordinates_type = {}
         self.current_type = None
         self.cost_distinct_coord = 1
-        self.cost_distinct_module = 0.5
-        self.costdict = {'ST' : 0, 'AJ1' : 1, 'AJ2' : 1.25, 'C' : 0, 'B' : 1.5}
+        self.cost_joint_to_joint = 0.25
+        self.cost_joint_to_brick = 0.75
+        # self.costdict = {'ST': 0, 'AJ1': 1, 'AJ2': 1.25, 'C': 0, 'B': 1.5}
 
     @property
     def id(self):
@@ -131,9 +132,10 @@ class RevolveBot:
                 self.current_type = self.substrate_coordinates_type[key]
                 planie.current_type = planie.substrate_coordinates_type[key]
                 if self.current_type != planie.current_type:
-                    # way of calculating the cost for different modules could be tweaked, differentiate between different
-                    # modules
-                    dif += self.cost_distinct_module
+                    if (self.current_type == 'AJ1' and planie.current_type == 'AJ2') or (self.current_type == 'AJ2' and planie.current_type == 'AJ1'):
+                        dif += self.cost_joint_to_joint
+                    else:
+                        dif += self.cost_joint_to_brick
             elif key in list:
                 continue
             else:
@@ -145,7 +147,10 @@ class RevolveBot:
                 self.current_type = self.substrate_coordinates_type[key]
                 planie.current_type = planie.substrate_coordinates_type[key]
                 if self.current_type != planie.current_type:
-                    dif += self.cost_distinct_module
+                    if (self.current_type == 'AJ1' and planie.current_type == 'AJ2') or (self.current_type == 'AJ2' and planie.current_type == 'AJ1'):
+                        dif += self.cost_joint_to_joint
+                    else:
+                        dif += self.cost_joint_to_brick
             elif key in list:
                 continue
             else:
