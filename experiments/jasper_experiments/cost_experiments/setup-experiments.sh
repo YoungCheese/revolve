@@ -11,8 +11,8 @@ managers_sulfix=("" "")
 experiments_path=jasper_experiments/data/
 managers_path=experiments/jasper_experiments/cost_experiments/
 
-#while true
-#	do
+while true
+	do
 
     echo "killing all processes..."
     #kill $(  ps aux | grep 'gzserver' | awk '{print $2}');
@@ -57,16 +57,16 @@ managers_path=experiments/jasper_experiments/cost_experiments/
     for experiment in "${to_do[@]}"
     do
          echo ""
-         echo -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 4 --port-start $start_port
+         # echo -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --evaluation-time 50 --n-cores 4 --port-start $start_port
 
-         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --run-simulation 0 --evaluation-time 50 --n-cores 4 --port-start $start_port
+         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --n-cores 4 --port-start $start_port
 
          start_port=$((${start_port}+10))
     done
 
-    #sleep 1800s;
+    sleep 1800s;
 
-#done
+done
 
 
 # killall screen
