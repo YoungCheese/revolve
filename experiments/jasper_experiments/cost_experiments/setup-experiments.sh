@@ -15,8 +15,8 @@ while true
 	do
 
     echo "killing all processes..."
-    #kill $(  ps aux | grep 'gzserver' | awk '{print $2}');
-    #kill $(  ps aux | grep 'revolve.py' | awk '{print $2}');
+    kill $(  ps aux | grep 'gzserver' | awk '{print $2}');
+    kill $(  ps aux | grep 'revolve.py' | awk '{print $2}');
 
     echo "restarting all processes..."
 
