@@ -19,7 +19,7 @@ while true
     kill $(  ps aux | grep 'revolve.py' | awk '{print $2}');
 
     echo "restarting all processes..."
-
+		sleep 60s;
     to_do=()
 
     for i in $(seq $runs)
