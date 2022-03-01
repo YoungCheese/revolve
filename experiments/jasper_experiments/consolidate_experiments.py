@@ -8,13 +8,13 @@ import sys
 dirpath = 'data/'
 
 experiments_type = [
-      'testtest'
+      'costplasticoding'
 ]
 environments = {
-  'testtest': ['plane', 'tilted5']
+  'costplasticoding': ['plane', 'tilted5']
                  }
 
-runs = range(1, 1+1)
+runs = range(1, 20+1)
 
 # set these variables according to your experiments #
 
