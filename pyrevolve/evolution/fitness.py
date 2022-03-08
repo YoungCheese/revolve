@@ -146,9 +146,9 @@ def displacement_velocity_cost(behavioural_measurements, robot):
         speed = behavioural_measurements['displacement_velocity_hill']
         # print(fitness, robot.phenotype.building_diff_unweighted)
         if speed > 0:
-            speed = speed/(robot.phenotype.building_diff_weighted+1)
+            speed = speed/(robot.phenotype.building_diff_unweighted+1)
         else:
-            speed = speed*(robot.phenotype.building_diff_weighted+1)
+            speed = speed*(robot.phenotype.building_diff_unweighted+1)
         return speed
     else:
         return None
