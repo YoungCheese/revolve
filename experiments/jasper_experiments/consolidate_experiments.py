@@ -8,10 +8,10 @@ import sys
 dirpath = 'data/'
 
 experiments_type = [
-      'costplasticoding'
+      'firstweighted'
 ]
 environments = {
-  'costplasticoding': ['plane', 'tilted5']
+  'firstweighted': ['plane', 'tilted5']
                  }
 
 runs = range(1, 20+1)
