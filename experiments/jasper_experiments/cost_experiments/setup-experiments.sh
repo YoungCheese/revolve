@@ -2,10 +2,10 @@
 #set -e
 #set -x
 
-runs=20
+runs=10
 num_terminals=6
 start_port=8000
-final_gen=199
+final_gen=49
 experiments=("lenientunweighted")
 managers_sulfix=("" "")
 experiments_path=jasper_experiments/data/

@@ -17,23 +17,23 @@ base_directory <-paste('data', sep='')
 analysis = 'analysis'
 output_directory = paste(base_directory,'/',analysis ,sep='')
 
-experiments_type = c('testtest')#, 'baseline')
-experiments_labels = c( 'testtest')
-runs = list(c(1:1),
-            c(1:1))
-environments = list( c( 'plane') )
+experiments_type = c('costplasticoding')#, 'baseline')
+experiments_labels = c( 'costplasticoding')
+runs = list(c(1:21),
+            c(1:21))
+environments = list( c( 'plane', 'tilted5') )
 
 # methods are product of experiments_type VS environments and should be coupled with colors.
 # make sure to define methods_labels in alphabetic order, and experiments_type accordingly
-methods_labels = c('testtest')
+methods_labels = c('costplasticoding')
 experiments_type_colors = c('#EE8610', # orange
                             '#009900') # green
 
 #aggregations = c('min', 'Q25','mean', 'median', 'Q75','max')
 aggregations = c( 'Q25', 'median', 'Q75')
 
-gens = 100
-pop = 20
+gens = 200
+pop = 100
 
 #gens_box_comparisons = c(number of gens-1)
 gens_box_comparisons = c(9)
