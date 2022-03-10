@@ -30,7 +30,7 @@ experiments_type_colors = c('#EE8610', # orange
                             '#009900') # green
 
 #aggregations = c('min', 'Q25','mean', 'median', 'Q75','max')
-aggregations = c( 'Q25', 'median', 'Q75')
+aggregations = c( 'Q25', 'median', 'Q75', 'mean')
 
 gens = 200
 pop = 100
