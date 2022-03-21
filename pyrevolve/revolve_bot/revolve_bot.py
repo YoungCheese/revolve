@@ -43,7 +43,7 @@ class RevolveBot:
         self.substrate_coordinates_all = None
         self.substrate_coordinates_type = {}
         self.current_type = None
-        self.cost_distinct_coord = 0.05
+        self.cost_distinct_coord = 0.1
         self.cost_joint_to_joint = 0.01
         self.cost_joint_to_brick = 0.25
         # self.costdict = {'ST': 0, 'AJ1': 1, 'AJ2': 1.25, 'C': 0, 'B': 1.5}
