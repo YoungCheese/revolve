@@ -8,10 +8,10 @@ import sys
 dirpath = 'data/'
 
 experiments_type = [
-      'lenientunweighted'
+      'lenienterunweighted'
 ]
 environments = {
-  'lenientunweighted': ['plane', 'tilted5']
+  'lenienterunweighted': ['plane', 'tilted5']
                  }
 
 runs = range(1, 10+1)
