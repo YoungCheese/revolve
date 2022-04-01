@@ -141,6 +141,14 @@ def displacement_velocity_hill(behavioural_measurements, robot):
         return None
 
 
+# make fitness function that maximizes 1/difference and fitness itself
+
+def fit_pareto(behavioural_measurements, robot):
+    # count individuals it dominates (consideren 1/blocks and speed)
+    pass
+
+
+
 def displacement_velocity_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
         limit = robot.phenotype.building_diff_unweighted

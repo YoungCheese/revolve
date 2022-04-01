@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import asyncio
-
 from pyrevolve import parser
 from pyrevolve.evolution import fitness
 from pyrevolve.evolution.selection import multiple_selection, tournament_selection
@@ -30,6 +29,7 @@ async def run():
     population_size = 100
     offspring_size = 100
     front = 'slaves'
+    print('kaas')
 
     # environment world and z-start
     environments = {'plane': 0.03,

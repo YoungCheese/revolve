@@ -652,6 +652,7 @@ class Population:
         # if there are multiple seasons (environments)
         else:
             for individual_ref in individuals:
+                print(individual_ref)
                 slaves = 0
                 total_slaves = 0
                 total_masters = 0

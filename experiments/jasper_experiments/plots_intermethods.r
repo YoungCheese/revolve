@@ -17,10 +17,10 @@ base_directory <-paste('data', sep='')
 analysis = 'analysis'
 output_directory = paste(base_directory,'/',analysis ,sep='')
 
-experiments_type = c('costplasticoding')#, 'baseline')
-experiments_labels = c( 'costplasticoding')
-runs = list(c(1:21),
-            c(1:21))
+experiments_type = c('lenientunweighted')#, 'baseline')
+experiments_labels = c( 'lenientunweighted')
+runs = list(c(1:11),
+            c(1:11))
 environments = list( c( 'plane', 'tilted5') )
 
 # methods are product of experiments_type VS environments and should be coupled with colors.
@@ -109,8 +109,8 @@ measures_labels = c(
   'Sensors Reach',
   'Recurrence',
   'Synaptic reception',
-  'unweighted_cost',
-  'weighted_cost'
+  'unweighted_blocks',
+  'weighted_blocks'
 )
 
 
