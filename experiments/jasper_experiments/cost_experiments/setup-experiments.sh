@@ -8,8 +8,8 @@ start_port=8000
 final_gen=49
 experiments=("lenienterunweighted")
 managers_sulfix=("" "")
-experiments_path=revolve/jasper_experiments/data/
-managers_path=revolve/experiments/jasper_experiments/cost_experiments/
+experiments_path=../../storage/jkoning/
+managers_path=experiments/jasper_experiments/cost_experiments/
 
 while true
 	do
