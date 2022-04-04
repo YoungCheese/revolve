@@ -159,7 +159,7 @@ class Population:
 
     async def load_individual(self, id):
 
-        path = 'experiments/'+self.conf.experiment_name+'/data_fullevolution'
+        path = self.conf.experiment_name+'/data_fullevolution'
         individual = {}
         for environment in self.conf.environments:
             try:
@@ -176,7 +176,7 @@ class Population:
         return individual
 
     def load_novelty_archive(self):
-        path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+        path = self.conf.experiment_name + '/data_fullevolution'
         file_name = os.path.join(path, 'novelty_archive.pkl')
         if Path(file_name).is_file():
             try:
@@ -193,7 +193,7 @@ class Population:
         """
 
         final_season = list(self.conf.environments.keys())[-1]
-        path = 'experiments/'+self.conf.experiment_name
+        path = self.conf.experiment_name
         for r, d, f in os.walk(os.path.join(path,'selectedpop_'+
                                final_season,'selectedpop_'+str(gen_num))):
             for file in f:
@@ -280,7 +280,7 @@ class Population:
                 if p < self.conf.all_settings.p_archive:
                     self.collect_measures([individual], self.novelty_archive[environment], environment)
 
-        path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+        path = self.conf.experiment_name + '/data_fullevolution'
         f = open(f'{path}/novelty_archive.pkl', "wb")
         pickle.dump(self.novelty_archive, f)
         f.close()
@@ -371,7 +371,7 @@ class Population:
             self.save_neat(0)
 
     def save_neat(self, gen_num):
-        path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+        path = self.conf.experiment_name + '/data_fullevolution'
         filename = f'{path}/neat_checkpoint_{gen_num}.pkl'
         with gzip.open(filename, 'w', compresslevel=5) as f:
             data = (self.neat, self.individuals)
