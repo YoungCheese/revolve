@@ -200,7 +200,10 @@ class RevolveBot:
             logger.exception('Failed measuring body')
 
     def export_phenotype_measurements(self, path, environment):
-        file = open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
+        # this one was from karine
+        # file = open('experiments/' + path + '/data_fullevolution/' + environment + '/descriptors/'
+        #           + 'phenotype_desc_' + str(self.id) + '.txt', 'a')
+        file = open(path + '/data_fullevolution/' + environment + '/descriptors/'
                   + 'phenotype_desc_' + str(self.id) + '.txt', 'a')
 
         for key, value in self._morphological_measurements.measurements_to_dict().items():
