@@ -5,7 +5,7 @@
 runs=6
 num_terminals=6
 start_port=8000
-final_gen=3
+final_gen=49
 experiments=("lenienterunweighted")
 managers_sulfix=("" "")
 experiments_path=/storage/jkoning/
