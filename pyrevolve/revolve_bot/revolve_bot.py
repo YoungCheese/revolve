@@ -165,6 +165,7 @@ class RevolveBot:
         setrot = set(self.substrate_coordinates_type)
         dif = setstill ^ setrot
         dif = len(dif)
+        dif = dif * self.cost_distinct_coord
         return dif
 
 

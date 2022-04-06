@@ -194,6 +194,7 @@ class Population:
 
         final_season = list(self.conf.environments.keys())[-1]
         path = self.conf.experiment_name
+        print('path', path)
         for r, d, f in os.walk(os.path.join(path,'selectedpop_'+
                                final_season,'selectedpop_'+str(gen_num))):
             for file in f:
