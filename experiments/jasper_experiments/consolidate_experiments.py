@@ -14,7 +14,7 @@ environments = {
   'lenienterunweighted': ['plane', 'tilted5']
                  }
 
-runs = range(1, 10+1)
+runs = range(1, 6+1)
 
 # set these variables according to your experiments #
 
