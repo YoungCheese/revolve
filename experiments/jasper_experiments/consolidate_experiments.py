@@ -5,7 +5,7 @@ import sys
 # set these variables according to your experiments #
 
 # run from karine_experiments
-dirpath = 'data/'
+dirpath = '/storage/jkoning'
 
 experiments_type = [
       'lenienterunweighted'
