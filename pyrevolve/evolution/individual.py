@@ -12,6 +12,7 @@ class Individual:
         self.genotype = genotype
         self.phenotype = phenotype
         self.fitness = None
+        self.flag = None
         # novelty is a measure of diversity
         self.novelty = None
         self.novelty_pop = None
@@ -20,10 +21,12 @@ class Individual:
         self.parents = None
         self.failed_eval_attempt_count = 0
         self.early_survival_probability = 0
+        self.building_diff_unweighted = 0
+        self.building_diff_weighted = 0
 
     def develop(self, environment):
         """
-        Develops genotype into a intermediate phenotype
+        Develops genotype into an intermediate phenotype
 
         """
         if self.phenotype is None:
@@ -79,4 +82,4 @@ class Individual:
         self.export_fitness(folder)
 
     def __repr__(self):
-        return f'Individual_{self.id}({self.fitness})'
+        return f'Individual_{self.id}({self.fitness}, {self.building_diff_unweighted})'

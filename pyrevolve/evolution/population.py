@@ -1,6 +1,7 @@
  # [(G,P), (G,P), (G,P), (G,P), (G,P)]
 
 from pyrevolve.evolution.individual import Individual
+from pyrevolve.revolve_bot import RevolveBot
 from pyrevolve.evolution import fitness
 from pyrevolve.SDF.math import Vector3
 from pyrevolve.tol.manage import measures
@@ -107,6 +108,8 @@ class Population:
         self.simulator_queue = simulator_queue
         self.next_robot_id = next_robot_id
         self.novelty_archive = {}
+        self.building_diff_unweighted = 0
+        self.building_diff_weighted = 0
         for environment in self.conf.environments:
             self.novelty_archive[environment] = []
         self.neat = {'latest_offspring': -1,
@@ -116,10 +119,11 @@ class Population:
 
         individual = {}
         individual_temp = Individual(genotype)
+        # print(type(self), 'type in _new_individual')
+        # raise Exception("KAPOT")
 
         for environment in self.conf.environments:
 
-            # print(environment)
 
             individual[environment] = copy.deepcopy(individual_temp)
             individual[environment].develop(environment)
@@ -140,11 +144,14 @@ class Population:
             if environment == 'tilted5':
 
                 # initiate cost measurement
-                individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
-                # individual[environment].phenotype.export_cost(self.conf.experiment_name, environment)
-                # print(individual['plane'].phenotype.building_diff_weighted)
-                # print(individual['tilted5'].phenotype.building_diff_weighted)
-
+                weighted, unweighted = individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
+                individual['tilted5'].building_diff_weighted = weighted
+                individual['plane'].building_diff_weighted = weighted
+                individual['tilted5'].building_diff_unweighted = unweighted
+                individual['plane'].building_diff_unweighted = unweighted
+                # print(individual['plane'], 'indiplane op meas moment')
+                # print(unweighted)
+                # print(individual, type(individual), 'individual in _new_individual')
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
                 individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane')
 
@@ -194,7 +201,6 @@ class Population:
 
         final_season = list(self.conf.environments.keys())[-1]
         path = self.conf.experiment_name
-        print('path', path)
         for r, d, f in os.walk(os.path.join(path,'selectedpop_'+
                                final_season,'selectedpop_'+str(gen_num))):
             for file in f:
@@ -293,7 +299,6 @@ class Population:
         for i in range(self.conf.population_size-len(recovered_individuals)):
             individual = self._new_individual(
                 self.conf.genotype_constructor(self.conf.genotype_conf, self.next_robot_id))
-            # print(self.conf.genotype_conf, 'gaat in newindi')
 
             self.individuals.append(individual)
             self.next_robot_id += 1
@@ -312,8 +317,13 @@ class Population:
 
         # calculate final fitness
         for environment in self.conf.environments:
+
             self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
+        # print(type(self), 'type in init_pop (Population)')
+        # print(self.building_diff_unweighted)
+        # print(self.individuals, 'self indis in init pop')
         self.consolidate_fitness(self.individuals, gen_num=0)
+
 
     async def init_pop_neat(self):
             """
@@ -640,11 +650,12 @@ class Population:
 
         return await self.simulator_queue[environment].test_robot(individual, conf)
 
-    def consolidate_fitness(self, individuals, gen_num):
+    def consolidate_fitness_costs(self, individuals, gen_num):
+
+        # pak data, schrijf om naar nuttig (arrays?) in dict?
 
         # saves consolidation only in the final season instances of individual (just a convention):
         final_season = list(self.conf.environments.keys())[-1]
-
         if len(self.conf.environments) == 1:
             for individual in individuals:
                 fit = individual[final_season].fitness
@@ -653,7 +664,7 @@ class Population:
         # if there are multiple seasons (environments)
         else:
             for individual_ref in individuals:
-                print(individual_ref)
+
                 slaves = 0
                 total_slaves = 0
                 total_masters = 0
@@ -686,6 +697,7 @@ class Population:
 
                             if individual_ref[environment].fitness < individual_comp[environment].fitness:
                                 equal += -1
+                                individual_ref[environment].flag
 
                             if individual_ref[environment].fitness == individual_comp[environment].fitness:
                                 equal += 1
@@ -729,8 +741,116 @@ class Population:
             self.conf.experiment_management.export_consolidated_fitness(individual[final_season], gen_num)
 
             if self.conf.all_settings.use_neat:
-                fitness = -float('Inf') if individual[final_season].consolidated_fitness is None \
-                    else individual[final_season].consolidated_fitness
+                if individual[final_season].consolidated_fitness is None:
+                    fitness = -float('Inf')
+                else:
+                    fitness = individual[final_season].consolidated_fitness
+                individual[final_season].genotype.cppn.fitness = fitness
+
+            else:
+                self.conf.experiment_management.export_individual(individual[final_season],
+                                                                  final_season)
+
+        # print('> Finished fitness consolidation.')
+
+    def consolidate_fitness(self, individuals, gen_num):
+
+        # saves consolidation only in the final season instances of individual (just a convention):
+        final_season = list(self.conf.environments.keys())[-1]
+        if len(self.conf.environments) == 1:
+            for individual in individuals:
+                fit = individual[final_season].fitness
+                individual[final_season].consolidated_fitness = fit
+
+        # if there are multiple seasons (environments)
+        else:
+            # print(individuals)
+            for individual_ref in individuals:
+                # print(individual_ref)
+
+                slaves = 0
+                total_slaves = 0
+                total_masters = 0
+                masters = 0
+
+                # this BIZARRE logic works only for two seasons! shame on me! fix it later!
+                for individual_comp in individuals:
+                    equal = 0
+                    better = 0
+
+
+                    for environment in self.conf.environments:
+
+                        if individual_ref[environment].fitness is None \
+                                and individual_comp[environment].fitness is None:
+                            equal += 1
+
+                        if individual_ref[environment].fitness is None \
+                                and individual_comp[environment].fitness is not None:
+                            equal += -1
+
+                        if individual_ref[environment].fitness is not None \
+                                and individual_comp[environment].fitness is None:
+                            better += 1
+
+                        if individual_ref[environment].fitness is not None \
+                                and individual_comp[environment].fitness is not None:
+
+                            if individual_ref[environment].fitness > individual_comp[environment].fitness:
+                                better += 1
+
+                            if individual_ref[environment].fitness < individual_comp[environment].fitness:
+                                equal += -1
+                                individual_ref[environment].flag = 'flag'
+
+                            if individual_ref[environment].fitness == individual_comp[environment].fitness:
+                                equal += 1
+
+                    # if it ref is not worse in any objective, and better in at least one, the comp becomes slave of ref
+                    if equal >= 0 and better > 0:
+                        slaves += 1
+                        print(slaves, individual_ref)
+
+                    # if better in all objectives
+                    if better == len(self.conf.environments):
+                        total_slaves += 1
+
+                    # if it is totally worse
+                    if equal < 0 and better == 0:
+                        total_masters += 1
+
+                    # if it is worse
+                    if equal <= 0 and better == 0:
+                        masters += 1
+
+
+                if self.conf.front == 'slaves':
+                    individual_ref[final_season].consolidated_fitness = slaves
+
+                if self.conf.front == 'total_slaves':
+                    individual_ref[final_season].consolidated_fitness = total_slaves
+
+                if self.conf.front == 'total_masters':
+                    if total_masters == 0:
+                        individual_ref[final_season].consolidated_fitness = 0
+                    else:
+                        individual_ref[final_season].consolidated_fitness = 1 / total_masters
+
+                if self.conf.front == 'masters':
+                    if masters == 0:
+                        individual_ref[final_season].consolidated_fitness = 0
+                    else:
+                        individual_ref[final_season].consolidated_fitness = 1 / masters
+
+        for individual in individuals:
+
+            self.conf.experiment_management.export_consolidated_fitness(individual[final_season], gen_num)
+
+            if self.conf.all_settings.use_neat:
+                if individual[final_season].consolidated_fitness is None:
+                    fitness = -float('Inf')
+                else:
+                    fitness = individual[final_season].consolidated_fitness
                 individual[final_season].genotype.cppn.fitness = fitness
 
             else:

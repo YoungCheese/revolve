@@ -43,7 +43,7 @@ class RevolveBot:
         self.substrate_coordinates_all = None
         self.substrate_coordinates_type = {}
         self.current_type = None
-        self.cost_distinct_coord = 0.05
+        self.cost_distinct_coord = 0.25
         self.cost_joint_to_joint = 0.01
         self.cost_joint_to_brick = 0.25
         # self.costdict = {'ST': 0, 'AJ1': 1, 'AJ2': 1.25, 'C': 0, 'B': 1.5}
@@ -87,8 +87,7 @@ class RevolveBot:
     def measure_cost(self,planie):
         self._recursive_coord(self._body)
         planie._recursive_coord(planie._body)
-        # print(self.substrate_coordinates_type)
-        # print(planie.substrate_coordinates_type)
+
         unweighted_costs = []
         weighted_costs = []
         unweighted_costs.append(self.symmetric_difference_unweighted(planie))
@@ -100,10 +99,10 @@ class RevolveBot:
         self.building_diff_weighted = min(weighted_costs)
         planie.building_diff_weighted = min(weighted_costs)
         self.building_diff_unweighted = min(unweighted_costs)
+        # print(type(planie), 'planietype (RevolveBot')
         planie.building_diff_unweighted = min(unweighted_costs)
+        return self.building_diff_unweighted, self.building_diff_weighted
 
-        # print(self.building_diff_unweighted, 'unw')
-        # print(self.building_diff_weighted, 'w')
 
 
     # rotates the grid of a robot. first entry becomes second entry of tuple, -1 * second becomes first.
@@ -211,7 +210,6 @@ class RevolveBot:
             file.write('{} {}\n'.format(key, value))
         for key, value in self._brain_measurements.measurements_to_dict().items():
             file.write('{} {}\n'.format(key, value))
-        # print('kaas')
         file.write('{} {}\n'.format('unweighted_cost', self.building_diff_unweighted))
         file.write('{} {}\n'.format('weighted_cost', self.building_diff_weighted))
 
@@ -402,7 +400,7 @@ class RevolveBot:
                 if coordinates in substrate_coordinates_map:
                     raise self.ItersectionCollisionException(substrate_coordinates_map)
                 substrate_coordinates_map[coordinates] = module.id
-                # print(substrate_coordinates_map, 'map')
+
 
             self._update_substrate(raise_for_intersections,
                                    module,

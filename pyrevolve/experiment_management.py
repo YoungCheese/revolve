@@ -14,7 +14,7 @@ class ExperimentManagement:
     def __init__(self, settings, environments):
         self.settings = settings
         self.environments = environments
-        self.dirpath = os.path.join('experiments', self.settings.experiment_name)
+        self.dirpath = self.settings.experiment_name
 
     def create_exp_folders(self):
         if os.path.exists(self.dirpath):
