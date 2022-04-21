@@ -2,7 +2,7 @@
 #set -e
 #set -x
 
-runs=6
+runs=10
 num_terminals=6
 start_port=8000
 final_gen=49
