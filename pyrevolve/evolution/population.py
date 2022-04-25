@@ -323,6 +323,7 @@ class Population:
         # print(self.building_diff_unweighted)
         # print(self.individuals, 'self indis in init pop')
         self.consolidate_fitness(self.individuals, gen_num=0)
+        self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
 
     async def init_pop_neat(self):
@@ -376,6 +377,7 @@ class Population:
 
             # consolidate seasonal fitnesses
             self.consolidate_fitness(self.individuals, gen_num=0)
+            self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
             self.neat['latest_snapshot'] = 0
             self.conf.experiment_management.export_snapshots(self.individuals, 0)
@@ -463,6 +465,7 @@ class Population:
 
             # consolidate seasonal fitnesses
             self.consolidate_fitness(self.individuals, gen_num)
+            self.consolidate_fitness_costs(self.individuals, gen_num)
 
             new_population = Population(self.conf, self.simulator_queue, self.analyzer_queue, self.next_robot_id)
             new_population.individuals = self.individuals
@@ -541,6 +544,7 @@ class Population:
 
         # consolidate fitness among seasons
         self.consolidate_fitness(selection_pool, gen_num)
+        self.consolidate_fitness_costs(selection_pool, gen_num)
 
         # create next population
         if self.conf.population_management_selector is not None:
@@ -651,90 +655,57 @@ class Population:
         return await self.simulator_queue[environment].test_robot(individual, conf)
 
     def consolidate_fitness_costs(self, individuals, gen_num):
-
-        # pak data, schrijf om naar nuttig (arrays?) in dict?
-
-        # saves consolidation only in the final season instances of individual (just a convention):
         final_season = list(self.conf.environments.keys())[-1]
-        if len(self.conf.environments) == 1:
-            for individual in individuals:
-                fit = individual[final_season].fitness
-                individual[final_season].consolidated_fitness = fit
+        arra = []
 
-        # if there are multiple seasons (environments)
-        else:
+        # for env in self.conf.environments:
+        for env in self.conf.environments:
+            envar = []
             for individual_ref in individuals:
+                if individual_ref[env].building_diff_unweighted == 0:
+                    cost = -1
+                else:
+                    cost = individual_ref[env].building_diff_unweighted
 
-                slaves = 0
-                total_slaves = 0
-                total_masters = 0
-                masters = 0
+                if individual_ref[env].fitness is None:
+                    indar = [-100, 1 / cost]
 
-                # this BIZARRE logic works only for two seasons! shame on me! fix it later!
-                for individual_comp in individuals:
-                    equal = 0
-                    better = 0
+                else:
+                    indar = [individual_ref[env].fitness, 1 / cost]
 
-                    for environment in self.conf.environments:
+                envar.append(indar)
+            arra.append(envar)
 
-                        if individual_ref[environment].fitness is None \
-                                and individual_comp[environment].fitness is None:
-                            equal += 1
+        numenv = len(self.conf.environments)
+        for i in range(len(arra[0])):
+            temp = 0
+            slaves = 0
+            for j in range(numenv):
+                if all(arra[j][i] >= x for x in arra[j]):
+                    temp += 1
+            if temp == numenv:
+                slaves += 1
+                # set consolidate fitness
 
-                        if individual_ref[environment].fitness is None \
-                                and individual_comp[environment].fitness is not None:
-                            equal += -1
+        # if self.conf.front == 'slaves':
+            individuals[i][final_season].consolidated_fitness = slaves
+            print(slaves, individuals[i], 'in nieuwe functie')
 
-                        if individual_ref[environment].fitness is not None \
-                                and individual_comp[environment].fitness is None:
-                            better += 1
 
-                        if individual_ref[environment].fitness is not None \
-                                and individual_comp[environment].fitness is not None:
-
-                            if individual_ref[environment].fitness > individual_comp[environment].fitness:
-                                better += 1
-
-                            if individual_ref[environment].fitness < individual_comp[environment].fitness:
-                                equal += -1
-                                individual_ref[environment].flag
-
-                            if individual_ref[environment].fitness == individual_comp[environment].fitness:
-                                equal += 1
-
-                    # if it ref is not worse in any objective, and better in at least one, the comp becomes slave of ref
-                    if equal >= 0 and better > 0:
-                        slaves += 1
-
-                    # if better in all objectives
-                    if better == len(self.conf.environments):
-                        total_slaves += 1
-
-                    # if it is totally worse
-                    if equal < 0 and better == 0:
-                        total_masters += 1
-
-                    # if it is worse
-                    if equal <= 0 and better == 0:
-                        masters += 1
-
-                if self.conf.front == 'slaves':
-                    individual_ref[final_season].consolidated_fitness = slaves
-
-                if self.conf.front == 'total_slaves':
-                    individual_ref[final_season].consolidated_fitness = total_slaves
-
-                if self.conf.front == 'total_masters':
-                    if total_masters == 0:
-                        individual_ref[final_season].consolidated_fitness = 0
-                    else:
-                        individual_ref[final_season].consolidated_fitness = 1 / total_masters
-
-                if self.conf.front == 'masters':
-                    if masters == 0:
-                        individual_ref[final_season].consolidated_fitness = 0
-                    else:
-                        individual_ref[final_season].consolidated_fitness = 1 / masters
+        # if self.conf.front == 'total_slaves':
+        #     individual_ref[final_season].consolidated_fitness = total_slaves
+        #
+        # if self.conf.front == 'total_masters':
+        #     if total_masters == 0:
+        #         individual_ref[final_season].consolidated_fitness = 0
+        #     else:
+        #         individual_ref[final_season].consolidated_fitness = 1 / total_masters
+        #
+        # if self.conf.front == 'masters':
+        #     if masters == 0:
+        #         individual_ref[final_season].consolidated_fitness = 0
+        #     else:
+        #         individual_ref[final_season].consolidated_fitness = 1 / masters
 
         for individual in individuals:
 
@@ -750,6 +721,7 @@ class Population:
             else:
                 self.conf.experiment_management.export_individual(individual[final_season],
                                                                   final_season)
+        return
 
         # print('> Finished fitness consolidation.')
 
@@ -809,7 +781,8 @@ class Population:
                     # if it ref is not worse in any objective, and better in at least one, the comp becomes slave of ref
                     if equal >= 0 and better > 0:
                         slaves += 1
-                        print(slaves, individual_ref)
+
+                        # print(slaves, individual_ref)
 
                     # if better in all objectives
                     if better == len(self.conf.environments):
@@ -825,7 +798,8 @@ class Population:
 
 
                 if self.conf.front == 'slaves':
-                    individual_ref[final_season].consolidated_fitness = slaves
+                    # individual_ref[final_season].consolidated_fitness = slaves
+                    print(slaves, individual_ref, 'in oude functie')
 
                 if self.conf.front == 'total_slaves':
                     individual_ref[final_season].consolidated_fitness = total_slaves
