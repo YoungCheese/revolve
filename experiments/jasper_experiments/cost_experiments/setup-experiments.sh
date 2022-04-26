@@ -2,10 +2,10 @@
 #set -e
 #set -x
 
-runs=10
+runs=20
 num_terminals=6
 start_port=8000
-final_gen=49
+final_gen=199
 experiments=("lenienterunweighted")
 managers_sulfix=("" "")
 experiments_path=/storage/jkoning/
