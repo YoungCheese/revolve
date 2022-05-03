@@ -17,8 +17,8 @@ base_directory <-paste('data', sep='')
 analysis = 'analysis'
 output_directory = paste(base_directory,'/',analysis ,sep='')
 
-experiments_type = c('lenientunweighted')#, 'baseline')
-experiments_labels = c( 'lenientunweighted')
+experiments_type = c('lenienterunweighted')#, 'baseline')
+experiments_labels = c( 'lenienterunweighted')
 runs = list(c(1:11),
             c(1:11))
 environments = list( c( 'plane', 'tilted5') )
@@ -32,7 +32,7 @@ experiments_type_colors = c('#EE8610', # orange
 #aggregations = c('min', 'Q25','mean', 'median', 'Q75','max')
 aggregations = c( 'Q25', 'median', 'Q75', 'mean')
 
-gens = 200
+gens = 50
 pop = 100
 
 #gens_box_comparisons = c(number of gens-1)
