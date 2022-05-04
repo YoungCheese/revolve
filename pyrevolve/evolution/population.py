@@ -149,9 +149,6 @@ class Population:
                 individual['plane'].building_diff_weighted = weighted
                 individual['tilted5'].building_diff_unweighted = unweighted
                 individual['plane'].building_diff_unweighted = unweighted
-                # print(individual['plane'], 'indiplane op meas moment')
-                # print(unweighted)
-                # print(individual, type(individual), 'individual in _new_individual')
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
                 individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane')
 
@@ -319,9 +316,6 @@ class Population:
         for environment in self.conf.environments:
 
             self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
-        # print(type(self), 'type in init_pop (Population)')
-        # print(self.building_diff_unweighted)
-        # print(self.individuals, 'self indis in init pop')
         self.consolidate_fitness(self.individuals, gen_num=0)
         self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
@@ -691,7 +685,6 @@ class Population:
                         break
 
                     if startenv == numenv:
-                        print('individual', i, 'beter dan individual', j)
                         slaves += 1
 
             # if self.conf.front == 'slaves':
@@ -809,8 +802,7 @@ class Population:
                     # individual_ref[final_season].consolidated_fitness = slaves
                     print(slaves, individual_ref, 'in oude functie')
                     if individual_ref == individuals[-1]:
-                        print('dit was de laatste van deze gen laatste')
-
+                        
                 if self.conf.front == 'total_slaves':
                     individual_ref[final_season].consolidated_fitness = total_slaves
 
