@@ -668,26 +668,33 @@ class Population:
                     cost = individual_ref[env].building_diff_unweighted
 
                 if individual_ref[env].fitness is None:
-                    indar = [-100, 1 / cost]
+                    indar = [1 / cost, -100]
 
                 else:
-                    indar = [individual_ref[env].fitness, 1 / cost]
+                    indar = [1 / cost, individual_ref[env].fitness]
 
                 envar.append(indar)
             arra.append(envar)
 
         numenv = len(self.conf.environments)
-        for i in range(len(arra[0])):
-            temp = 0
+        leng = len(arra[0])
+        for i in range(leng):
             slaves = 0
-            for j in range(numenv):
-                if all(arra[j][i] >= x for x in arra[j]):
-                    temp += 1
-            if temp == numenv:
-                slaves += 1
-                # set consolidate fitness
+            for j in range(leng):
+                startenv = 0
+                while startenv < numenv:
+                    if arra[startenv][i][0] >= arra[startenv][j][0] and arra[startenv][i][1] >= arra[startenv][j][
+                        1] and i != j:
+                        startenv += 1
 
-        # if self.conf.front == 'slaves':
+                    else:
+                        break
+
+                    if startenv == numenv:
+                        print('individual', i, 'beter dan individual', j)
+                        slaves += 1
+
+            # if self.conf.front == 'slaves':
             individuals[i][final_season].consolidated_fitness = slaves
             print(slaves, individuals[i], 'in nieuwe functie')
 
@@ -738,6 +745,7 @@ class Population:
         else:
             # print(individuals)
             for individual_ref in individuals:
+
                 # print(individual_ref)
 
                 slaves = 0
@@ -800,6 +808,8 @@ class Population:
                 if self.conf.front == 'slaves':
                     # individual_ref[final_season].consolidated_fitness = slaves
                     print(slaves, individual_ref, 'in oude functie')
+                    if individual_ref == individuals[-1]:
+                        print('dit was de laatste van deze gen laatste')
 
                 if self.conf.front == 'total_slaves':
                     individual_ref[final_season].consolidated_fitness = total_slaves
