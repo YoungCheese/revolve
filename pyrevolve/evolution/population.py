@@ -316,7 +316,7 @@ class Population:
         for environment in self.conf.environments:
 
             self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
-        self.consolidate_fitness(self.individuals, gen_num=0)
+        # self.consolidate_fitness(self.individuals, gen_num=0)
         self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
 
@@ -370,7 +370,7 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
 
             # consolidate seasonal fitnesses
-            self.consolidate_fitness(self.individuals, gen_num=0)
+            # self.consolidate_fitness(self.individuals, gen_num=0)
             self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
             self.neat['latest_snapshot'] = 0
@@ -458,7 +458,7 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=gen_num, environment=environment)
 
             # consolidate seasonal fitnesses
-            self.consolidate_fitness(self.individuals, gen_num)
+            # self.consolidate_fitness(self.individuals, gen_num)
             self.consolidate_fitness_costs(self.individuals, gen_num)
 
             new_population = Population(self.conf, self.simulator_queue, self.analyzer_queue, self.next_robot_id)
@@ -537,7 +537,7 @@ class Population:
             selection_pool = self.individuals + individuals_survived
 
         # consolidate fitness among seasons
-        self.consolidate_fitness(selection_pool, gen_num)
+        # self.consolidate_fitness(selection_pool, gen_num)
         self.consolidate_fitness_costs(selection_pool, gen_num)
 
         # create next population
