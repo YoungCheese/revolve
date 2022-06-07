@@ -316,8 +316,8 @@ class Population:
         for environment in self.conf.environments:
 
             self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
-        # self.consolidate_fitness(self.individuals, gen_num=0)
-        self.consolidate_fitness_costs(self.individuals, gen_num=0)
+        self.consolidate_fitness(self.individuals, gen_num=0)
+        # self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
 
     async def init_pop_neat(self):
@@ -370,8 +370,8 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
 
             # consolidate seasonal fitnesses
-            # self.consolidate_fitness(self.individuals, gen_num=0)
-            self.consolidate_fitness_costs(self.individuals, gen_num=0)
+            self.consolidate_fitness(self.individuals, gen_num=0)
+            # self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
             self.neat['latest_snapshot'] = 0
             self.conf.experiment_management.export_snapshots(self.individuals, 0)
@@ -458,8 +458,8 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=gen_num, environment=environment)
 
             # consolidate seasonal fitnesses
-            # self.consolidate_fitness(self.individuals, gen_num)
-            self.consolidate_fitness_costs(self.individuals, gen_num)
+            self.consolidate_fitness(self.individuals, gen_num)
+            # self.consolidate_fitness_costs(self.individuals, gen_num)
 
             new_population = Population(self.conf, self.simulator_queue, self.analyzer_queue, self.next_robot_id)
             new_population.individuals = self.individuals
@@ -537,8 +537,8 @@ class Population:
             selection_pool = self.individuals + individuals_survived
 
         # consolidate fitness among seasons
-        # self.consolidate_fitness(selection_pool, gen_num)
-        self.consolidate_fitness_costs(selection_pool, gen_num)
+        self.consolidate_fitness(selection_pool, gen_num)
+        # self.consolidate_fitness_costs(selection_pool, gen_num)
 
         # create next population
         if self.conf.population_management_selector is not None:
@@ -721,7 +721,6 @@ class Population:
             else:
                 self.conf.experiment_management.export_individual(individual[final_season],
                                                                   final_season)
-        return
 
         # print('> Finished fitness consolidation.')
 
