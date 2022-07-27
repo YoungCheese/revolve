@@ -8,10 +8,10 @@ import sys
 dirpath = 'data/jkoning/'
 
 experiments_type = [
-      'lenienterunweighted'
+      'finalimplement'
 ]
 environments = {
-  'lenienterunweighted': ['plane', 'tilted5']
+  'finalimplement': ['plane', 'tilted5']
                  }
 
 runs = range(1, 20+1)

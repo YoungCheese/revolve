@@ -17,8 +17,8 @@
   analysis = 'analysis'
   output_directory = paste(base_directory,'/',analysis ,sep='')
   
-  experiments_type = c('lenienterunweighted')#, 'baseline')
-  experiments_labels = c( 'lenienterunweighted')
+  experiments_type = c('finalimplement')#, 'baseline')
+  experiments_labels = c( 'finalimplement')
   runs = list(c(1:20),
               c(1:20))
   environments = list( c( 'plane', 'tilted5') )

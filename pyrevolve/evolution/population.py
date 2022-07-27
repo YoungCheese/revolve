@@ -677,8 +677,8 @@ class Population:
             for j in range(leng):
                 startenv = 0
                 while startenv < numenv:
-                    if arra[startenv][i][0] >= arra[startenv][j][0] and arra[startenv][i][1] >= arra[startenv][j][
-                        1] and i != j:
+                    if arra[startenv][i][0] >= arra[startenv][j][0] and arra[startenv][i][1] >= arra[startenv][j][1] and i != j:
+                        print(arra[startenv])
                         startenv += 1
 
                     else:

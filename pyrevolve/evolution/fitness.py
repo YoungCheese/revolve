@@ -180,7 +180,7 @@ def displacement_velocity_cost(behavioural_measurements, robot):
 
 def displacement_velocity_hill_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
-        fitness = displacement_velocity_cost_no_one(behavioural_measurements, robot)
+        fitness = displacement_velocity_cost(behavioural_measurements, robot)
 
         if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
             fitness = -0.1
