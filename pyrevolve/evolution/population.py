@@ -689,7 +689,7 @@ class Population:
 
             # if self.conf.front == 'slaves':
             individuals[i][final_season].consolidated_fitness = slaves
-            print(slaves, individuals[i], 'in nieuwe functie')
+            # print(slaves, individuals[i], 'in nieuwe functie')
 
 
         # if self.conf.front == 'total_slaves':
