@@ -151,7 +151,7 @@ class Population:
                 individual['plane'].building_diff_unweighted = unweighted
                 print(len(individual['tilted5'].phenotype.substrate_coordinates_type), 'werkt?')
                 print(len(individual['plane'].phenotype.substrate_coordinates_type), 'werkt2?')
-                tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type), (individual['tilted5'].phenotype.substrate_coordinates_type))
+                tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type), len(individual['tilted5'].phenotype.substrate_coordinates_type))
                 individual['tilted5'].biggest_bot = tempsize
                 individual['plane'].biggest_bot = tempsize
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
