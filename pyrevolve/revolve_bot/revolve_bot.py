@@ -40,6 +40,7 @@ class RevolveBot:
         self.battery_level = 0.0
         self.building_diff_unweighted = 0
         self.building_diff_weighted = 0
+        self.biggest_bot = 0
         self.substrate_coordinates_all = None
         self.substrate_coordinates_type = {}
         self.current_type = None
@@ -126,6 +127,7 @@ class RevolveBot:
         dif = 0
         list = []
         for key in self.substrate_coordinates_type:
+            print()
             if key in planie.substrate_coordinates_type:
                 list.append(key)
                 self.current_type = self.substrate_coordinates_type[key]
