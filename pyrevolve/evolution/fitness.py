@@ -165,10 +165,10 @@ def displacement_velocity_cost_no_one(behavioural_measurements, robot):
 
 def displacement_velocity_relative_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
-        print(robot.phenotype.biggest_bot, 'this is the size in absolutes')
-        print(robot.phenotype.building_diff_unweighted)
+        # print(robot.phenotype.biggest_bot, 'this is the size in absolutes')
+        # print(robot.phenotype.building_diff_unweighted)
         limit = robot.phenotype.building_diff_unweighted/robot.phenotype.biggest_bot
-        print(limit)
+        # print(limit)
         speed = behavioural_measurements['displacement_velocity_hill']
         # print(fitness, robot.phenotype.building_diff_unweighted)
 

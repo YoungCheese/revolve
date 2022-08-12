@@ -149,8 +149,8 @@ class Population:
                 individual['plane'].building_diff_weighted = weighted
                 individual['tilted5'].building_diff_unweighted = unweighted
                 individual['plane'].building_diff_unweighted = unweighted
-                print(len(individual['tilted5'].phenotype.substrate_coordinates_type), 'werkt?')
-                print(len(individual['plane'].phenotype.substrate_coordinates_type), 'werkt2?')
+                # print(len(individual['tilted5'].phenotype.substrate_coordinates_type), 'werkt?')
+                # print(len(individual['plane'].phenotype.substrate_coordinates_type), 'werkt2?')
                 tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type), len(individual['tilted5'].phenotype.substrate_coordinates_type))
                 individual['tilted5'].biggest_bot = tempsize
                 individual['plane'].biggest_bot = tempsize
@@ -804,7 +804,7 @@ class Population:
 
                 if self.conf.front == 'slaves':
                     # individual_ref[final_season].consolidated_fitness = slaves
-                    print(slaves, individual_ref, 'in oude functie')
+                    # print(slaves, individual_ref, 'in oude functie')
 
 
                 if self.conf.front == 'total_slaves':

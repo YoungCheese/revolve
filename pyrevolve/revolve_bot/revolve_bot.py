@@ -127,7 +127,7 @@ class RevolveBot:
         dif = 0
         list = []
         for key in self.substrate_coordinates_type:
-            print()
+            # print()
             if key in planie.substrate_coordinates_type:
                 list.append(key)
                 self.current_type = self.substrate_coordinates_type[key]
