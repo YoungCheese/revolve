@@ -728,6 +728,7 @@ class Population:
                                                                   final_season)
 
         # print('> Finished fitness consolidation.')
+        return
 
     def consolidate_fitness(self, individuals, gen_num):
 
@@ -837,4 +838,4 @@ class Population:
                 self.conf.experiment_management.export_individual(individual[final_season],
                                                                   final_season)
 
-        # print('> Finished fitness consolidation.')
+        print('> Finished fitness consolidation.')
