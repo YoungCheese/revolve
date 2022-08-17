@@ -2,7 +2,7 @@
 #set -e
 #set -x
 echo 'je oma ja'
-runs=10
+runs=6
 num_terminals=6
 start_port=8000
 final_gen=199
