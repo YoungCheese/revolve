@@ -734,7 +734,6 @@ class Population:
 
         # saves consolidation only in the final season instances of individual (just a convention):
         final_season = list(self.conf.environments.keys())[-1]
-
         if len(self.conf.environments) == 1:
             for individual in individuals:
                 fit = individual[final_season].fitness
@@ -742,7 +741,11 @@ class Population:
 
         # if there are multiple seasons (environments)
         else:
+            # print(individuals)
             for individual_ref in individuals:
+
+                # print(individual_ref)
+
                 slaves = 0
                 total_slaves = 0
                 total_masters = 0
@@ -752,6 +755,7 @@ class Population:
                 for individual_comp in individuals:
                     equal = 0
                     better = 0
+
 
                     for environment in self.conf.environments:
 
@@ -775,6 +779,7 @@ class Population:
 
                             if individual_ref[environment].fitness < individual_comp[environment].fitness:
                                 equal += -1
+                                individual_ref[environment].flag = 'flag'
 
                             if individual_ref[environment].fitness == individual_comp[environment].fitness:
                                 equal += 1
@@ -782,6 +787,8 @@ class Population:
                     # if it ref is not worse in any objective, and better in at least one, the comp becomes slave of ref
                     if equal >= 0 and better > 0:
                         slaves += 1
+
+                        # print(slaves, individual_ref)
 
                     # if better in all objectives
                     if better == len(self.conf.environments):
@@ -795,8 +802,11 @@ class Population:
                     if equal <= 0 and better == 0:
                         masters += 1
 
+
                 if self.conf.front == 'slaves':
                     individual_ref[final_season].consolidated_fitness = slaves
+                    # print(slaves, individual_ref, 'in oude functie')
+
 
                 if self.conf.front == 'total_slaves':
                     individual_ref[final_season].consolidated_fitness = total_slaves
@@ -818,8 +828,10 @@ class Population:
             self.conf.experiment_management.export_consolidated_fitness(individual[final_season], gen_num)
 
             if self.conf.all_settings.use_neat:
-                fitness = -float('Inf') if individual[final_season].consolidated_fitness is None \
-                    else individual[final_season].consolidated_fitness
+                if individual[final_season].consolidated_fitness is None:
+                    fitness = -float('Inf')
+                else:
+                    fitness = individual[final_season].consolidated_fitness
                 individual[final_season].genotype.cppn.fitness = fitness
 
             else:
