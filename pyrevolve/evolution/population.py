@@ -732,15 +732,17 @@ class Population:
 
     def consolidate_fitness(self, individuals, gen_num):
 
+        # saves consolidation only in the final season instances of individual (just a convention):
+        final_season = list(self.conf.environments.keys())[-1]
+
         if len(self.conf.environments) == 1:
             for individual in individuals:
-                fit = individual[list(self.conf.environments.keys())[-1]].fitness
-                individual[list(self.conf.environments.keys())[-1]].consolidated_fitness = fit
+                fit = individual[final_season].fitness
+                individual[final_season].consolidated_fitness = fit
 
         # if there are multiple seasons (environments)
         else:
             for individual_ref in individuals:
-
                 slaves = 0
                 total_slaves = 0
                 total_masters = 0
@@ -748,11 +750,11 @@ class Population:
 
                 # this BIZARRE logic works only for two seasons! shame on me! fix it later!
                 for individual_comp in individuals:
-
                     equal = 0
                     better = 0
 
                     for environment in self.conf.environments:
+
                         if individual_ref[environment].fitness is None \
                                 and individual_comp[environment].fitness is None:
                             equal += 1
@@ -794,27 +796,34 @@ class Population:
                         masters += 1
 
                 if self.conf.front == 'slaves':
-                    individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = slaves
+                    individual_ref[final_season].consolidated_fitness = slaves
 
                 if self.conf.front == 'total_slaves':
-                    individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = total_slaves
+                    individual_ref[final_season].consolidated_fitness = total_slaves
 
                 if self.conf.front == 'total_masters':
                     if total_masters == 0:
-                        individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = 0
+                        individual_ref[final_season].consolidated_fitness = 0
                     else:
-                        individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = 1/total_masters
+                        individual_ref[final_season].consolidated_fitness = 1 / total_masters
 
                 if self.conf.front == 'masters':
                     if masters == 0:
-                        individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = 0
+                        individual_ref[final_season].consolidated_fitness = 0
                     else:
-                        individual_ref[list(self.conf.environments.keys())[-1]].consolidated_fitness = 1/masters
+                        individual_ref[final_season].consolidated_fitness = 1 / masters
 
         for individual in individuals:
-            self.conf.experiment_management.export_consolidated_fitness(individual[list(self.conf.environments.keys())[-1]])
 
-            self.conf.experiment_management.export_individual(individual[list(self.conf.environments.keys())[-1]],
-                                                              list(self.conf.environments.keys())[-1])
+            self.conf.experiment_management.export_consolidated_fitness(individual[final_season], gen_num)
+
+            if self.conf.all_settings.use_neat:
+                fitness = -float('Inf') if individual[final_season].consolidated_fitness is None \
+                    else individual[final_season].consolidated_fitness
+                individual[final_season].genotype.cppn.fitness = fitness
+
+            else:
+                self.conf.experiment_management.export_individual(individual[final_season],
+                                                                  final_season)
 
         print('> Finished fitness consolidation.')
