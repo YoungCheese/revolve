@@ -813,7 +813,7 @@ class Population:
                     # if it ref is not worse in any objective, and better in at least one, the comp becomes slave of ref
                     if equal >= 0 and better > 0:
                         slaves += 1
-                        print(slaves, individual_ref)
+                        # print(slaves, individual_ref)
 
                     # if better in all objectives
                     if better == len(self.conf.environments):
