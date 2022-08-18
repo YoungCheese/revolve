@@ -59,11 +59,11 @@ while true
          echo ""
          # echo -d -m -S "${experiment}" -L -Logfile "${experiment}.log" -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --evaluation-time 50 --n-cores 4 --port-start $start_port
 
-         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --n-cores 4 --port-start $start_port --run-simulation 0
+         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --n-cores 4 --port-start $start_port
          start_port=$((${start_port}+10))
     done
 
-    sleep 360s;
+    sleep 720s;
 
 done
 
