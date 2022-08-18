@@ -1,23 +1,6 @@
-#!/usr/bin/env python3
-import asyncio
-from pyrevolve import parser
-from pyrevolve.evolution import fitness
-from pyrevolve.evolution.selection import multiple_selection, tournament_selection
-from pyrevolve.evolution.population import Population, PopulationConfig
-from pyrevolve.evolution.pop_management.steady_state import steady_state_population_management
-from pyrevolve.experiment_management import ExperimentManagement
-from pyrevolve.genotype.plasticoding.crossover.crossover import CrossoverConfig
-from pyrevolve.genotype.plasticoding.crossover.standard_crossover import standard_crossover
-from pyrevolve.genotype.plasticoding.initialization import random_initialization
-from pyrevolve.genotype.plasticoding.mutation.mutation import MutationConfig
-from pyrevolve.genotype.plasticoding.mutation.standard_mutation import standard_mutation
-from pyrevolve.genotype.plasticoding.plasticoding import PlasticodingConfig
-from pyrevolve.tol.manage import measures
-from pyrevolve.util.supervisor.simulator_queue import SimulatorQueue
-from pyrevolve.util.supervisor.analyzer_queue import AnalyzerQueue
-from pyrevolve.custom_logging.logger import logger
-import sys
-#
+#!/bin/bash
+#set -e
+#set -x
 
 runs=10
 num_terminals=6
