@@ -5,13 +5,13 @@ import sys
 # set these variables according to your experiments #
 
 # run from karine_experiments
-dirpath = 'data/jkoning/'
+dirpath = '/storage/jkoning/'
 
 experiments_type = [
-      'lenienterunweighted'
+      'relativeunweighted'
 ]
 environments = {
-  'lenienterunweighted': ['plane', 'tilted5']
+  'relativeunweighted': ['plane', 'tilted5']
                  }
 
 runs = range(1, 6+1)
