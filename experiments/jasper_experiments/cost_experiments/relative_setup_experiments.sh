@@ -4,7 +4,7 @@
 
 runs=10
 num_terminals=6
-start_port=8000
+start_port=4000
 final_gen=199
 experiments=("relativeunweighted")
 managers_sulfix=("" "")
