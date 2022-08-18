@@ -40,6 +40,7 @@ class RevolveBot:
         self.battery_level = 0.0
         self.building_diff_unweighted = 0
         self.building_diff_weighted = 0
+        self.biggest_bot = 0
         self.substrate_coordinates_all = None
         self.substrate_coordinates_type = {}
         self.current_type = None
