@@ -19,11 +19,11 @@ class Individual:
         self.consolidated_fitness = None
         self.evaluated = False
         self.parents = None
-        self.biggest_bot = 0
         self.failed_eval_attempt_count = 0
         self.early_survival_probability = 0
         self.building_diff_unweighted = 0
         self.building_diff_weighted = 0
+        self.biggest_bot = 0
 
     def develop(self, environment):
         """
