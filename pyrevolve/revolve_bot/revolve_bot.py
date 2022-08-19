@@ -214,6 +214,7 @@ class RevolveBot:
             file.write('{} {}\n'.format(key, value))
         file.write('{} {}\n'.format('unweighted_cost', self.building_diff_unweighted))
         file.write('{} {}\n'.format('weighted_cost', self.building_diff_weighted))
+        file.write('{} {}\n'.format('biggest_bot', self.biggest_bot))
 
         file.close()
 
