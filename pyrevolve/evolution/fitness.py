@@ -188,8 +188,8 @@ def displacement_velocity_relative_cost(behavioural_measurements, robot):
             robot.phenotype.biggest_bot = 1
         limit = robot.phenotype.building_diff_unweighted/robot.phenotype.biggest_bot
         speed = behavioural_measurements['displacement_velocity_hill']
-        print(robot.phenotype.biggest_bot, 'biggest_bot')
-        print(limit, 'limitc')
+        # print(robot.phenotype.biggest_bot, 'biggest_bot')
+        # print(limit, 'limitc')
         # print(fitness, robot.phenotype.building_diff_unweighted)
         if limit == 0:
             return speed/10
