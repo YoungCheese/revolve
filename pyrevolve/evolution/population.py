@@ -110,6 +110,7 @@ class Population:
         self.novelty_archive = {}
         self.building_diff_unweighted = 0
         self.building_diff_weighted = 0
+        self.biggest_bot = 0
         for environment in self.conf.environments:
             self.novelty_archive[environment] = []
         self.neat = {'latest_offspring': -1,
@@ -154,6 +155,8 @@ class Population:
                 tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type), len(individual['tilted5'].phenotype.substrate_coordinates_type))
                 individual['tilted5'].biggest_bot = tempsize
                 individual['plane'].biggest_bot = tempsize
+                individual['tilted5'].phenotype.biggest_bot = tempsize
+                individual['plane'].phenotype.biggest_bot = tempsize
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
                 individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane')
 
@@ -175,6 +178,7 @@ class Population:
                 file_name = os.path.join(path, environment, 'individuals', 'individual_'+id+'.pkl')
                 file = open(file_name, 'rb')
                 individual[environment] = pickle.load(file)
+                file.close()
 
             except:
 

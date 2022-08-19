@@ -89,6 +89,7 @@ class WorldManager(manage.WorldManager):
 
         # Sorry Matteo
         if False: #output_directory:
+            print('world alarm')
             if not restore:
                 restore = datetime.now() \
                     .strftime(datetime.now().strftime('%Y%m%d%H%M%S'))
@@ -129,6 +130,10 @@ class WorldManager(manage.WorldManager):
                 self.poses_file = open(self.poses_filename, 'ab')
                 self.write_robots = csv.writer(self.robots_file, delimiter=',')
                 self.write_poses = csv.writer(self.poses_file, delimiter=',')
+                self.robots_file.close()
+                self.poses_file.close()
+                self.write_robots.close()
+                self.write_poses.close()
             else:
                 # Open poses file, this is written *a lot* so use default OS
                 # buffering

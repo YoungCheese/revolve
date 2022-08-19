@@ -167,15 +167,18 @@ def displacement_velocity_relative_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
         # print(robot.phenotype.biggest_bot, 'this is the size in absolutes')
         # print(robot.phenotype.building_diff_unweighted)
+        if robot.phenotype.biggest_bot == 0:
+            robot.phenotype.biggest_bot = 1
+            print('ring the alarm')
         limit = robot.phenotype.building_diff_unweighted/robot.phenotype.biggest_bot
         # print(limit)
         speed = behavioural_measurements['displacement_velocity_hill']
         # print(fitness, robot.phenotype.building_diff_unweighted)
 
         if speed > 0:
-            speed = speed/(limit+1)
+            speed = speed/(limit)
         else:
-            speed = speed*(limit+1)
+            speed = speed*(limit)
         return speed
     else:
         return None
@@ -201,7 +204,7 @@ def displacement_velocity_hill_cost(behavioural_measurements, robot):
         fitness = displacement_velocity_cost_no_one(behavioural_measurements, robot)
 
         if fitness == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
-            print(robot.phenotype._morphological_measurements.measurements_to_dict()['absolute_size'], 'this is the size in absolutes')
+            # print(robot.phenotype._morphological_measurements.measurements_to_dict()['absolute_size'], 'this is the size in absolutes')
             fitness = -0.1
 
         elif fitness < 0:

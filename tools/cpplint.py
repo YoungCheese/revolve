@@ -3199,6 +3199,7 @@ def ProcessFile(filename, vlevel, extra_check_functions=[]):
                                         'replace').read().split('\n')
     else:
       lines = codecs.open(filename, 'r', 'utf8', 'replace').read().split('\n')
+      lines.close()
 
     carriage_return_found = False
     # Remove trailing '\r'.
