@@ -198,7 +198,7 @@ def displacement_velocity_relative_cost(behavioural_measurements, robot):
                 speed = speed/(limit)
             else:
                 speed = speed*(limit)
-        return speed
+            return speed
     else:
         return None
 
