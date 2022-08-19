@@ -159,6 +159,8 @@ class Population:
                 # print(tempsize, 'tempsize')
                 individual['tilted5'].phenotype.biggest_bot = tempsize
                 individual['plane'].phenotype.biggest_bot = tempsize
+                individual['tilted5'].biggest_bot = tempsize
+                individual['plane'].biggest_bot = tempsize
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
                 individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane')
 
