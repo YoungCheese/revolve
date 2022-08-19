@@ -154,9 +154,9 @@ class Population:
                 # print(individual, type(individual), 'individual in _new_individual')
                 tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type),
                                len(individual['tilted5'].phenotype.substrate_coordinates_type))
-                print(len(individual['tilted5'].phenotype.substrate_coordinates_type), 'testtild')
-                print(len(individual['plane'].phenotype.substrate_coordinates_type), 'testplane')
-                print(tempsize, 'tempsize')
+                # print(len(individual['tilted5'].phenotype.substrate_coordinates_type), 'testtild')
+                # print(len(individual['plane'].phenotype.substrate_coordinates_type), 'testplane')
+                # print(tempsize, 'tempsize')
                 individual['tilted5'].phenotype.biggest_bot = tempsize
                 individual['plane'].phenotype.biggest_bot = tempsize
                 individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5')
