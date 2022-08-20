@@ -86,7 +86,7 @@ async def run():
 
     def fitness_function_plane(measures, robot):
         # divide by cost
-        return fitness.displacement_velocity_cost_no_one(measures, robot)
+        return fitness.displacement_velocity_cost(measures, robot)
 
     fitness_function = {'plane': fitness_function_plane,
                         'tilted5': fitness_function_plane} # same function

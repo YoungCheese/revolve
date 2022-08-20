@@ -62,7 +62,7 @@ while true
 				 start_port=$((${start_port}+10))
 		done
 
-    sleep 300s;
+    sleep 600s;
 
 done
 
