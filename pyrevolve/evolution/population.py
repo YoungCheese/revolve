@@ -133,7 +133,23 @@ class Population:
                                                                     environment,'phenotype_images'),
                                                                     individual[environment])
             individual[environment].phenotype.measure_phenotype(self.conf.experiment_name)
-            individual[environment].phenotype.export_phenotype_measurements(self.conf.experiment_name, environment)
+
+            if environment == 'tilted5':
+
+                # initiate cost measurement
+                unweighted = individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
+                # individual['tilted5'].building_diff_unweighted = unweighted
+                # individual['plane'].building_diff_unweighted = unweighted
+
+                # tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type),
+                #                len(individual['tilted5'].phenotype.substrate_coordinates_type))
+                # individual['tilted5'].biggest_bot = tempsize
+                # individual['plane'].biggest_bot = tempsize
+                individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5', unweighted)
+                individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane', unweighted)
+
+
+
             # because of the bloating in plasticoding, cleans up intermediate phenotype before saving object
             individual[environment].genotype.intermediate_phenotype = None
 
@@ -141,6 +157,9 @@ class Population:
                 self.conf.experiment_management.export_individual(individual[environment], environment)
 
         return individual
+
+
+
 
     async def load_individual(self, id):
 
@@ -264,7 +283,7 @@ class Population:
                 if p < self.conf.all_settings.p_archive:
                     self.collect_measures([individual], self.novelty_archive[environment], environment)
 
-        path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+        path =  self.conf.experiment_name + '/data_fullevolution'
         f = open(f'{path}/novelty_archive.pkl', "wb")
         pickle.dump(self.novelty_archive, f)
         f.close()

@@ -36,6 +36,13 @@ class RevolveBot:
         self._behavioural_measurements = None
         self.self_collide = self_collide
         self.battery_level = 0.0
+        self.building_diff_unweighted = 0
+        self.building_diff_weighted = 0
+        self.biggest_bot = 0
+        self.substrate_coordinates_all = None
+        self.substrate_coordinates_type = {}
+        self.current_type = None
+        self.cost_distinct_coord = 0.05
 
     @property
     def id(self):
@@ -60,6 +67,50 @@ class RevolveBot:
                 count += 1 + self._recursive_size_measurement(child)
 
         return count
+
+    # recursively gets coordinates from all the non sensor modules and puts in dict with coordinates as key and module as value
+    def _recursive_coord(self, module):
+        if module.info['new_module_type']._value_ != 'ST':
+            self.substrate_coordinates_type[(module.substrate_coordinates[0],module.substrate_coordinates[1] )] = module.info['new_module_type']._value_
+        for _, child in module.iter_children():
+            if child is not None:
+                self._recursive_coord(child)
+
+    # compares 2 grids by changing the grids to a set and check differences
+    # via built in method
+    def symmetric_difference_unweighted(self, planie):
+        setstill = set(planie.substrate_coordinates_type)
+        setrot = set(self.substrate_coordinates_type)
+        dif = setstill ^ setrot
+        dif = len(dif)
+        dif = dif * self.cost_distinct_coord
+        return dif
+
+    # rotates the grid of a robot. first entry becomes second entry of tuple, -1 * second becomes first.
+    # flag to see if unweighted or weighted. this decides which dict to rotate
+    def rotate(self):
+        newdict = {}
+        for key in self.substrate_coordinates_type:
+            newkey = (-1 * key[1], key[0])
+            newdict[newkey] = self.substrate_coordinates_type[key]
+        # rotate the coordinates 90 degrees
+        self.substrate_coordinates_type = newdict
+
+    # function that measures weighted and unweighted costs. adds cost to list, rotates one of the
+    # dicts and measures again. adds lowest cost to attribute
+    def measure_cost(self,planie):
+        self._recursive_coord(self._body)
+        planie._recursive_coord(planie._body)
+
+        unweighted_costs = []
+        unweighted_costs.append(self.symmetric_difference_unweighted(planie))
+        for i in range(3):
+            self.rotate()
+            unweighted_costs.append(self.symmetric_difference_unweighted(planie))
+        self.building_diff_unweighted = min(unweighted_costs)
+        # print(type(planie), 'planietype (RevolveBot')
+        planie.building_diff_unweighted = min(unweighted_costs)
+        return self.building_diff_unweighted
 
     def measure_behaviour(self):
         """
@@ -87,14 +138,19 @@ class RevolveBot:
         except Exception as e:
             logger.exception('Failed measuring body')
 
-    def export_phenotype_measurements(self, path, environment):
-        with open('experiments/' + path + '/data_fullevolution/'+environment+'/descriptors/'
-                  + 'phenotype_desc_' + str(self.id) + '.txt', 'w+') as file:
+    def export_phenotype_measurements(self, path, environment, cost):
+        file = open(path + '/data_fullevolution/' + environment + '/descriptors/'
+                    + 'phenotype_desc_' + str(self.id) + '.txt', 'a')
 
-            for key, value in self._morphological_measurements.measurements_to_dict().items():
-                file.write('{} {}\n'.format(key, value))
-            for key, value in self._brain_measurements.measurements_to_dict().items():
-                file.write('{} {}\n'.format(key, value))
+        for key, value in self._morphological_measurements.measurements_to_dict().items():
+            file.write('{} {}\n'.format(key, value))
+        for key, value in self._brain_measurements.measurements_to_dict().items():
+            file.write('{} {}\n'.format(key, value))
+        file.write('{} {}\n'.format('weighted_cost', cost))
+
+        file.close()
+
+
 
     def measure_brain(self):
         """

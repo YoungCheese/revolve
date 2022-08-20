@@ -140,6 +140,25 @@ def displacement_velocity_hill(behavioural_measurements, robot):
     else:
         return None
 
+def displacement_velocity_cost_no_one(behavioural_measurements, robot):
+    if behavioural_measurements is not None:
+        limit = robot.phenotype.building_diff_unweighted
+        speed = behavioural_measurements['displacement_velocity_hill']
+
+        if speed == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
+            return -0.1
+        # print(fitness, robot.phenotype.building_diff_unweighted)
+        elif limit == 0:
+            return speed/10
+        else:
+            if speed > 0:
+                speed = speed/(limit)
+            else:
+                speed = speed*(limit)
+            return speed
+    else:
+        return None
+
 
 def gecko(robot):
 
