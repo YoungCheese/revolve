@@ -37,7 +37,7 @@ class RevolveBot:
         self.self_collide = self_collide
         self.battery_level = 0.0
         self.building_diff_unweighted = 0
-        self.building_diff_weighted = 0
+        # self.building_diff_weighted = 0
         self.biggest_bot = 0
         self.substrate_coordinates_all = None
         self.substrate_coordinates_type = {}
@@ -146,7 +146,7 @@ class RevolveBot:
             file.write('{} {}\n'.format(key, value))
         for key, value in self._brain_measurements.measurements_to_dict().items():
             file.write('{} {}\n'.format(key, value))
-        file.write('{} {}\n'.format('weighted_cost', cost))
+        file.write('{} {}\n'.format('unweighted_cost', cost))
 
         file.close()
 
