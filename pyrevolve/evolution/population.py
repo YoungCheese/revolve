@@ -138,7 +138,7 @@ class Population:
 
                 # initiate cost measurement
                 unweighted = individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
-                print(unweighted, 'individual')
+                # print(unweighted, 'individual')
                 # individual['tilted5'].building_diff_unweighted = unweighted
                 # individual['plane'].building_diff_unweighted = unweighted
 
