@@ -1,8 +1,8 @@
 #!/bin/bash
 #set -e
 #set -x
-runs=4
-num_terminals=4
+runs=3
+num_terminals=3
 start_port=8000
 final_gen=10
 experiments=("tttestrundoc")
