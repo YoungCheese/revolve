@@ -144,18 +144,19 @@ def displacement_velocity_cost(behavioural_measurements, robot):
     if behavioural_measurements is not None:
         limit = robot.phenotype.building_diff_unweighted
         speed = behavioural_measurements['displacement_velocity_hill']
-        # print(fitness, robot.phenotype.building_diff_unweighted)
+        print('fitness', robot.phenotype.building_diff_unweighted)
+        print(robot)
 
         if speed == 0 or robot.phenotype._morphological_measurements.measurements_to_dict()['hinge_count'] == 0:
             return -0.1
-        elif limit == 0:
+        if limit == 0:
             return speed/10
         else:
             if speed > 0:
                 speed = speed/(limit+1)
             else:
                 speed = speed*(limit+1)
-        return speed
+            return speed
     else:
         return None
 
