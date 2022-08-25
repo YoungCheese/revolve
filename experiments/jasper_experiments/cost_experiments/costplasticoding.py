@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import asyncio
+
 from pyrevolve import parser
 from pyrevolve.evolution import fitness
 from pyrevolve.evolution.selection import multiple_selection, tournament_selection
@@ -17,7 +18,7 @@ from pyrevolve.util.supervisor.simulator_queue import SimulatorQueue
 from pyrevolve.util.supervisor.analyzer_queue import AnalyzerQueue
 from pyrevolve.custom_logging.logger import logger
 import sys
-#
+
 
 async def run():
     """
@@ -44,8 +45,7 @@ async def run():
                                'coverage',
                                'joints',
                                'proportion',
-                               'symmetry',
-                               'size' ,]
+                               'symmetry']
                   }
 
     # novelty used 'branching', 'limbs','length_of_limbs','coverage','joints','proportion', 'symmetry', 'sensors','size'
@@ -85,7 +85,6 @@ async def run():
         next_robot_id = 1
 
     def fitness_function_plane(measures, robot):
-        # divide by cost
         return fitness.displacement_velocity_hill(measures, robot)
 
     fitness_function = {'plane': fitness_function_plane,
@@ -156,7 +155,6 @@ async def run():
 
             if gen_num == 0:
                 await population.init_pop(individuals)
-                sys.exit()
             else:
                 population = await population.next_gen(gen_num, individuals)
 
@@ -172,8 +170,4 @@ async def run():
         population = await population.next_gen(gen_num)
         experiment_management.export_snapshots(population.individuals, gen_num)
 
-        # render = Render()
-        # render.traverse_path_of_robot(self.body, 0, False)
-        # coordinates = render.grid.visited_coordinates
-        # print(coordinates)
     # output result after completing all generations...
