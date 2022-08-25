@@ -6,7 +6,7 @@ num_terminals=6
 start_port=8000
 final_gen=199
 experiments=("costplasticoding")
-managers_sulfix=(")
+managers_sulfix=("")
 experiments_path=/storage/jkoning/
 managers_path=experiments/jasper_experiments/cost_experiments/
 
