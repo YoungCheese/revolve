@@ -156,8 +156,11 @@ async def run():
             logger.info('Recovered unfinished offspring '+str(gen_num))
 
             if gen_num == 0:
+                print('in has offspring')
                 await population.init_pop(individuals)
-                sys.exit()
+
+                # onthouden jasper : dit heb ik er ooit bijgezet
+                # sys.exit()
             else:
                 population = await population.next_gen(gen_num, individuals)
 
@@ -165,6 +168,7 @@ async def run():
     else:
         # starting a new experiment
         experiment_management.create_exp_folders()
+        print('no offspring')
         await population.init_pop()
         experiment_management.export_snapshots(population.individuals, gen_num)
 
