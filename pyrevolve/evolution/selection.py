@@ -35,6 +35,9 @@ def multiple_selection(population, selection_size, selection_function, environme
     :param selection_size: amount of indivuals to select
     :param selection_function:
     """
+
+    if len(population) < 2:
+        print(population, len(population), 'population')
     assert (len(population) >= selection_size)
     selected_individuals = []
     for _ in range(selection_size):

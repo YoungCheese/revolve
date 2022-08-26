@@ -163,9 +163,15 @@ class Population:
 
 
     async def load_individual(self, id):
-
-        path = 'experiments/'+self.conf.experiment_name+'/data_fullevolution'
+        print(self.conf.experiment_name, self.conf.experiment_name[0], 'naampje')
         individual = {}
+        if "storage" in self.conf.experiment_name:
+            path = '/storage/jkoning/' + self.conf.experiment_name + '/data_fullevolution'
+            print(path)
+        else:
+            path = self.conf.experiment_name
+            print(path)
+
         for environment in self.conf.environments:
             try:
                 file_name = os.path.join(path, environment, 'individuals', 'individual_'+id+'.pkl')
@@ -173,11 +179,12 @@ class Population:
                 individual[environment] = pickle.load(file)
 
             except:
-
                 print('bad pickle for robot', id, ' was replaced for new robot with None fitness')
                 individual = self._new_individual(
                     self.conf.genotype_constructor(self.conf.genotype_conf, id))
 
+        if individual == {}:
+            print('kaput')
         return individual
 
     def load_novelty_archive(self):
