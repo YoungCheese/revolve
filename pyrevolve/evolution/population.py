@@ -165,16 +165,13 @@ class Population:
     async def load_individual(self, id):
         print(self.conf.experiment_name, self.conf.experiment_name[0], 'naampje')
         individual = {}
-        if "storage" in self.conf.experiment_name:
-            path = '/storage/jkoning/' + self.conf.experiment_name + '/data_fullevolution'
-            print(path)
-        else:
-            path = self.conf.experiment_name
-            print(path)
+
+        path = self.conf.experiment_name + '/data_fullevolution'
 
         for environment in self.conf.environments:
             try:
                 file_name = os.path.join(path, environment, 'individuals', 'individual_'+id+'.pkl')
+                print(file_name)
                 file = open(file_name, 'rb')
                 individual[environment] = pickle.load(file)
 
@@ -188,7 +185,9 @@ class Population:
         return individual
 
     def load_novelty_archive(self):
+        # path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
         path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+
         file_name = os.path.join(path, 'novelty_archive.pkl')
         if Path(file_name).is_file():
             try:
@@ -204,7 +203,8 @@ class Population:
         """
 
         final_season = list(self.conf.environments.keys())[-1]
-        path = 'experiments/'+self.conf.experiment_name
+        # path = 'experiments/'+self.conf.experiment_name
+        path = self.conf.experiment_name
         for r, d, f in os.walk(os.path.join(path,'selectedpop_'+
                                final_season,'selectedpop_'+str(gen_num))):
             for file in f:
