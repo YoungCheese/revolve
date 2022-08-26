@@ -134,20 +134,20 @@ class Population:
                                                                     individual[environment])
             individual[environment].phenotype.measure_phenotype(self.conf.experiment_name)
 
-            # if environment == 'tilted5':
-            #
-            #     # initiate cost measurement
-            #     unweighted = individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
-            #     # print(unweighted, 'individual')
-            #     # individual['tilted5'].building_diff_unweighted = unweighted
-            #     # individual['plane'].building_diff_unweighted = unweighted
-            #
-            #     # tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type),
-            #     #                len(individual['tilted5'].phenotype.substrate_coordinates_type))
-            #     # individual['tilted5'].biggest_bot = tempsize
-            #     # individual['plane'].biggest_bot = tempsize
-            #     individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5', unweighted)
-            #     individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane', unweighted)
+            if environment == 'tilted5':
+
+                # initiate cost measurement
+                unweighted = individual[environment].phenotype.measure_cost(individual['plane'].phenotype)
+                # print(unweighted, 'individual')
+                # individual['tilted5'].building_diff_unweighted = unweighted
+                # individual['plane'].building_diff_unweighted = unweighted
+
+                # tempsize = max(len(individual['plane'].phenotype.substrate_coordinates_type),
+                #                len(individual['tilted5'].phenotype.substrate_coordinates_type))
+                # individual['tilted5'].biggest_bot = tempsize
+                # individual['plane'].biggest_bot = tempsize
+                individual['tilted5'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'tilted5', unweighted)
+                individual['plane'].phenotype.export_phenotype_measurements(self.conf.experiment_name, 'plane', unweighted)
 
 
 
@@ -163,7 +163,7 @@ class Population:
 
 
     async def load_individual(self, id):
-        print(self.conf.experiment_name, self.conf.experiment_name[0], 'naampje')
+        # print(self.conf.experiment_name, self.conf.experiment_name[0], 'naampje')
         individual = {}
 
         path = self.conf.experiment_name + '/data_fullevolution'
@@ -171,7 +171,7 @@ class Population:
         for environment in self.conf.environments:
             try:
                 file_name = os.path.join(path, environment, 'individuals', 'individual_'+id+'.pkl')
-                print(file_name)
+                # print(file_name)
                 file = open(file_name, 'rb')
                 individual[environment] = pickle.load(file)
 
@@ -186,7 +186,7 @@ class Population:
 
     def load_novelty_archive(self):
         # path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
-        path = 'experiments/' + self.conf.experiment_name + '/data_fullevolution'
+        path = self.conf.experiment_name + '/data_fullevolution'
 
         file_name = os.path.join(path, 'novelty_archive.pkl')
         if Path(file_name).is_file():
