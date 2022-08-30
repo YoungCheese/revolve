@@ -138,7 +138,7 @@ class RevolveBot:
         except Exception as e:
             logger.exception('Failed measuring body')
 
-    def export_phenotype_measurements(self, path, environment, cost):
+    def export_phenotype_measurements(self, path, environment, cost, tempsize):
         file = open(path + '/data_fullevolution/' + environment + '/descriptors/'
                     + 'phenotype_desc_' + str(self.id) + '.txt', 'a')
 
@@ -147,6 +147,7 @@ class RevolveBot:
         for key, value in self._brain_measurements.measurements_to_dict().items():
             file.write('{} {}\n'.format(key, value))
         file.write('{} {}\n'.format('unweighted_cost', cost))
+        file.write('{} {}\n'.format('biggest_bot', tempsize))
 
         file.close()
 

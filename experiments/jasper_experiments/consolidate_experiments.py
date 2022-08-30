@@ -8,10 +8,10 @@ import sys
 dirpath = '/storage/jkoning/'
 
 experiments_type = [
-      'costplasticoding'
+      'relativecostplasticoding'
 ]
 environments = {
-  'costplasticoding': ['plane', 'tilted5']
+  'relativecostplasticoding': ['plane', 'tilted5']
                  }
 
 runs = range(1, 10+1)

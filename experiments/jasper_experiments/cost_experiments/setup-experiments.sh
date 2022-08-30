@@ -5,7 +5,7 @@ runs=10
 num_terminals=6
 start_port=8000
 final_gen=199
-experiments=("costplasticoding")
+experiments=("relativecostplasticoding")
 managers_sulfix=("")
 experiments_path=/storage/jkoning/
 managers_path=experiments/jasper_experiments/cost_experiments/
@@ -55,7 +55,7 @@ while true
     for experiment in "${to_do[@]}"
     do
          echo ""
-         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --evaluation-time 50 --n-cores 4 --port-start $start_port
+         screen -d -m -S "${experiment}" -L -Logfile "${experiment}.log" nice -n19 ./revolve.sh --manager "${managers_path}$(cut -d'_' -f1 <<<"$experiment")${managers_sulfix}.py" --experiment-name "${experiments_path}${experiment}" --evaluation-time 50 --n-cores 4 --port-start $start_port --run-simulation 0
          start_port=$((${start_port}+10))
     done
 
