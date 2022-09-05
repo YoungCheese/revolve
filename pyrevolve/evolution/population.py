@@ -322,7 +322,8 @@ class Population:
         # calculate final fitness
         for environment in self.conf.environments:
             self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
-        self.consolidate_fitness(self.individuals, gen_num=0)
+        # self.consolidate_fitness(self.individuals, gen_num=0)
+        self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
     async def init_pop_neat(self):
             """
@@ -374,7 +375,8 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=0, environment=environment)
 
             # consolidate seasonal fitnesses
-            self.consolidate_fitness(self.individuals, gen_num=0)
+            # self.consolidate_fitness(self.individuals, gen_num=0)
+            self.consolidate_fitness_costs(self.individuals, gen_num=0)
 
             self.neat['latest_snapshot'] = 0
             self.conf.experiment_management.export_snapshots(self.individuals, 0)
@@ -461,7 +463,8 @@ class Population:
                 self.calculate_final_fitness(individuals=self.individuals, gen_num=gen_num, environment=environment)
 
             # consolidate seasonal fitnesses
-            self.consolidate_fitness(self.individuals, gen_num)
+            # self.consolidate_fitness(self.individuals, gen_num)
+            self.consolidate_fitness_costs(self.individuals, gen_num)
 
             new_population = Population(self.conf, self.simulator_queue, self.analyzer_queue, self.next_robot_id)
             new_population.individuals = self.individuals
@@ -539,8 +542,8 @@ class Population:
             selection_pool = self.individuals + individuals_survived
 
         # consolidate fitness among seasons
-        self.consolidate_fitness(selection_pool, gen_num)
-
+        # self.consolidate_fitness(selection_pool, gen_num)
+        self.consolidate_fitness_costs(self.individuals, gen_num)
         # create next population
         if self.conf.population_management_selector is not None:
             new_individuals = self.conf.population_management(selection_pool,
@@ -647,6 +650,81 @@ class Population:
                 return None
 
         return await self.simulator_queue[environment].test_robot(individual, conf)
+
+    def consolidate_fitness_costs(self, individuals, gen_num):
+        final_season = list(self.conf.environments.keys())[-1]
+        arra = []
+
+        # for env in self.conf.environments:
+        for env in self.conf.environments:
+            envar = []
+            for individual_ref in individuals:
+                if individual_ref[env].phenotype.building_diff_unweighted == 0:
+                    cost = -1
+                else:
+                    cost = individual_ref[env].phenotype.building_diff_unweighted
+
+                if individual_ref[env].fitness is None:
+                    indar = [1 / cost, -100]
+
+                else:
+                    indar = [1 / cost, individual_ref[env].fitness]
+
+                envar.append(indar)
+            arra.append(envar)
+
+        numenv = len(self.conf.environments)
+        leng = len(arra[0])
+        for i in range(leng):
+            slaves = 0
+            for j in range(leng):
+                startenv = 0
+                while startenv < numenv:
+                    if arra[startenv][i][0] >= arra[startenv][j][0] and arra[startenv][i][1] >= arra[startenv][j][1] and i != j:
+                        print(arra[startenv])
+                        startenv += 1
+
+                    else:
+                        break
+
+                    if startenv == numenv:
+                        slaves += 1
+
+            # if self.conf.front == 'slaves':
+            individuals[i][final_season].consolidated_fitness = slaves
+            # print(slaves, individuals[i], 'in nieuwe functie')
+
+        # if self.conf.front == 'total_slaves':
+        #     individual_ref[final_season].consolidated_fitness = total_slaves
+        #
+        # if self.conf.front == 'total_masters':
+        #     if total_masters == 0:
+        #         individual_ref[final_season].consolidated_fitness = 0
+        #     else:
+        #         individual_ref[final_season].consolidated_fitness = 1 / total_masters
+        #
+        # if self.conf.front == 'masters':
+        #     if masters == 0:
+        #         individual_ref[final_season].consolidated_fitness = 0
+        #     else:
+        #         individual_ref[final_season].consolidated_fitness = 1 / masters
+
+        for individual in individuals:
+
+            self.conf.experiment_management.export_consolidated_fitness(individual[final_season], gen_num)
+
+            if self.conf.all_settings.use_neat:
+                if individual[final_season].consolidated_fitness is None:
+                    fitness = -float('Inf')
+                else:
+                    fitness = individual[final_season].consolidated_fitness
+                individual[final_season].genotype.cppn.fitness = fitness
+
+            else:
+                self.conf.experiment_management.export_individual(individual[final_season],
+                                                                  final_season)
+
+        print('> Finished fitness consolidation.')
 
     def consolidate_fitness(self, individuals, gen_num):
 
