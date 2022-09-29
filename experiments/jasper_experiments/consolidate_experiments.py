@@ -5,13 +5,13 @@ import sys
 # set these variables according to your experiments #
 
 # run from karine_experiments
-dirpath = '/storage/jkoning/'
+dirpath = '/storage/karine/revolve1/frontiers20'
 
 experiments_type = [
-      'relativecostplasticoding'
+      'baseline_big'
 ]
 environments = {
-  'relativecostplasticoding': ['plane', 'tilted5']
+  'baseline_big': ['plane', 'tilted5']
                  }
 
 runs = range(1, 10+1)
