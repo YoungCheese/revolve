@@ -5,7 +5,7 @@ import sys
 # set these variables according to your experiments #
 
 # run from karine_experiments
-dirpath = '/storage/karine/revolve1/frontiers20'
+dirpath = '/storage/karine/revolve1/frontiers20/'
 
 experiments_type = [
       'baseline_big'
